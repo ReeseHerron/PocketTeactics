@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="UnitData" format=3 uid="uid://bu3etdnqr12xn"]
+
+[ext_resource type="Script" uid="uid://c2jkvnhuwwiy3" path="res://data/units/UnitData.gd" id="1_1mr48"]
+
+[resource]
+script = ExtResource("1_1mr48")
+display_name = "Basic Striker"
+metadata/_custom_type_script = "uid://c2jkvnhuwwiy3"
