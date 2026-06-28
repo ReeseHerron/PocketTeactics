@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://knjjolv1jkwd"]
+
+[ext_resource type="Script" uid="uid://bropqayc2nnun" path="res://scenes/ui/BoardPanel.gd" id="1_21w81"]
+
+[node name="BoardPanel" type="Node2D" unique_id=2047677339]
+script = ExtResource("1_21w81")
+
+[node name="GridContainer" type="GridContainer" parent="." unique_id=362346410]
+offset_top = 130.0
+offset_right = 1151.0
+offset_bottom = 515.0
+columns = 3

@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dghgx3j5c80m5"]
+
+[ext_resource type="Script" uid="uid://d3ns3v8yuai34" path="res://scenes/ui/DraftPanel.gd" id="1_d8n35"]
+
+[node name="DraftPanel" type="Node2D" unique_id=1660982203]
+script = ExtResource("1_d8n35")

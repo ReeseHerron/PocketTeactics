@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cw5d41wcdf6ek"]
+
+[ext_resource type="Script" uid="uid://ycq6766hcjdr" path="res://scenes/ui/StatusPanel.gd" id="1_llc5v"]
+
+[node name="StausPanel" type="Node2D" unique_id=1041885523]
+script = ExtResource("1_llc5v")

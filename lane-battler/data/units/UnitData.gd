@@ -16,3 +16,11 @@ func get_max_might() -> int:
 		2: return 3
 		3: return 6
 	return 2
+
+func get_type_name() -> String:
+	match unit_type:
+		UnitType.STRIKER: return "Striker"
+		UnitType.BULWARK: return "Bulwark"
+		UnitType.TACTICIAN: return "Tactician"
+	return "?"
+	
