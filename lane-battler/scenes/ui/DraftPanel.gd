@@ -4,8 +4,12 @@ extends VBoxContainer
 var bid_values: Array = [0, 0, 0]
 var bids_active: Array = [false, false, false]
 
-@onready var cards = [$Card0, $Card1, $Card2]
-@onready var bid_inputs = [$Bid0, $Bid1, $Bid2]
+@onready var cards = [$CardsRow/Card0, $CardsRow/Card1, $CardsRow/Card2]
+@onready var bid_inputs = [
+	$CardsRow/Card0/Bid0,
+	$CardsRow/Card1/Bid1,
+	$CardsRow/Card2/Bid2
+]
 @onready var bids_used_label = $BidsUsedLabel
 @onready var total_label = $TotalLabel
 @onready var confirm_btn = $ConfirmBtn
@@ -17,8 +21,14 @@ func _ready() -> void:
 
 func populate(units: Array) -> void:
 	for i in range(3):
-		cards[i].setup(units[i])
+		var card = cards[i]
+		var unit = units[i]
+		card.get_node("NameLabel").text = unit.display_name
+		card.get_node("TypeLabel").text = unit.get_type_name()
+		card.get_node("CostLabel").text = "Floor: %d" % unit.floor_cost
 		bid_inputs[i].value = 0
+		bid_inputs[i].min_value = 0
+		bid_inputs[i].max_value = GameState.gold[0]
 	bid_values = [0, 0, 0]
 	bids_active = [false, false, false]
 	_refresh()

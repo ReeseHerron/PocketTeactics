@@ -2,11 +2,13 @@ extends Node
 
 @onready var status_panel = $StatusPanel
 @onready var board_panel = $BoardPanel
+@onready var bench_panel = $BenchPanel
 @onready var draft_panel = $DraftPanel
 @onready var action_panel = $ActionPanel
 @onready var combat_log = $CombatLog
 
 func _ready() -> void:
+	print("Main ready, connecting signals")
 	RoundManager.waiting_for_player.connect(_on_waiting_for_player)
 	GameState.state_changed.connect(_refresh_ui)
 	GameState.vp_changed.connect(func(a, b): _refresh_ui())
@@ -22,7 +24,11 @@ func _refresh_ui() -> void:
 	board_panel.refresh()
 
 func _on_waiting_for_player(phase) -> void:
+	print("Main received waiting_for_player: ", phase)
 	_refresh_ui()
+	# Hide all interactive panels first
+	draft_panel.hide()
+	action_panel.hide()
 	match phase:
 		RoundManager.Phase.DRAFT_BIDDING:
 			draft_panel.populate(GameState.current_draft_units)

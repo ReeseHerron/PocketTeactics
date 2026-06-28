@@ -1,42 +1,297 @@
 [gd_scene format=3 uid="uid://bejxxkaheodeu"]
 
 [ext_resource type="Script" uid="uid://cg06j0nt7ujg1" path="res://scenes/ActionPanel.gd" id="1_elqb8"]
+[ext_resource type="Script" uid="uid://xe5kwofhcak5" path="res://src/Main.gd" id="1_rvslj"]
+[ext_resource type="Script" uid="uid://ycq6766hcjdr" path="res://src/StatusPanel.gd" id="2_vcsgt"]
+[ext_resource type="Script" uid="uid://bropqayc2nnun" path="res://scenes/ui/BoardPanel.gd" id="3_c01mt"]
+[ext_resource type="Script" uid="uid://dws56gwgjt5w7" path="res://scenes/ui/BoardSlot.gd" id="4_c01mt"]
+[ext_resource type="Script" uid="uid://d3ns3v8yuai34" path="res://scenes/ui/DraftPanel.gd" id="4_nxtc6"]
 
-[node name="Main" type="Node2D" unique_id=471209568]
+[node name="Main" type="Control" unique_id=1571649950]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_rvslj")
 
 [node name="StatusPanel" type="VBoxContainer" parent="." unique_id=1601887717]
-offset_right = 191.0
-offset_bottom = 79.0
+layout_mode = 0
+offset_left = 900.0
+offset_top = 3.0
+offset_right = 1151.0
+offset_bottom = 176.0
+script = ExtResource("2_vcsgt")
+
+[node name="RoundLabel" type="Label" parent="StatusPanel" unique_id=1409372623]
+layout_mode = 2
+
+[node name="PlayerVP" type="Label" parent="StatusPanel" unique_id=1569778289]
+layout_mode = 2
+
+[node name="BotVP" type="Label" parent="StatusPanel" unique_id=939711867]
+layout_mode = 2
+
+[node name="PlayerGold" type="Label" parent="StatusPanel" unique_id=900102815]
+layout_mode = 2
+
+[node name="BotGold" type="Label" parent="StatusPanel" unique_id=548139602]
+layout_mode = 2
 
 [node name="BoardPanel" type="GridContainer" parent="." unique_id=1802525335]
-offset_top = 101.0
-offset_right = 1148.0
-offset_bottom = 527.0
+custom_minimum_size = Vector2(400, 200)
+layout_mode = 0
+offset_left = 257.0
+offset_top = 93.0
+offset_right = 954.0
+offset_bottom = 510.0
+theme_override_constants/h_separation = 100
+theme_override_constants/v_separation = 20
+columns = 3
+script = ExtResource("3_c01mt")
+
+[node name="PlayerLeft" type="PanelContainer" parent="BoardPanel" unique_id=69401314]
+layout_mode = 2
+script = ExtResource("4_c01mt")
+
+[node name="VBox" type="VBoxContainer" parent="BoardPanel/PlayerLeft" unique_id=850477906]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="BoardPanel/PlayerLeft/VBox" unique_id=701775222]
+layout_mode = 2
+
+[node name="TierLabel" type="Label" parent="BoardPanel/PlayerLeft/VBox" unique_id=2121238375]
+layout_mode = 2
+
+[node name="TypeLabel" type="Label" parent="BoardPanel/PlayerLeft/VBox" unique_id=1108070968]
+layout_mode = 2
+
+[node name="MightLabel" type="Label" parent="BoardPanel/PlayerLeft/VBox" unique_id=1750050044]
+layout_mode = 2
+
+[node name="PlayerCenter" type="PanelContainer" parent="BoardPanel" unique_id=1285566524]
+layout_mode = 2
+script = ExtResource("4_c01mt")
+
+[node name="VBox" type="VBoxContainer" parent="BoardPanel/PlayerCenter" unique_id=673512468]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="BoardPanel/PlayerCenter/VBox" unique_id=1332936671]
+layout_mode = 2
+
+[node name="TierLabel" type="Label" parent="BoardPanel/PlayerCenter/VBox" unique_id=1358673311]
+layout_mode = 2
+
+[node name="TypeLabel" type="Label" parent="BoardPanel/PlayerCenter/VBox" unique_id=58718211]
+layout_mode = 2
+
+[node name="MightLabel" type="Label" parent="BoardPanel/PlayerCenter/VBox" unique_id=245174589]
+layout_mode = 2
+
+[node name="PlayerRight" type="PanelContainer" parent="BoardPanel" unique_id=484122681]
+layout_mode = 2
+script = ExtResource("4_c01mt")
+
+[node name="VBox" type="VBoxContainer" parent="BoardPanel/PlayerRight" unique_id=1883665879]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="BoardPanel/PlayerRight/VBox" unique_id=824994193]
+layout_mode = 2
+
+[node name="TierLabel" type="Label" parent="BoardPanel/PlayerRight/VBox" unique_id=1703222392]
+layout_mode = 2
+
+[node name="TypeLabel" type="Label" parent="BoardPanel/PlayerRight/VBox" unique_id=24545310]
+layout_mode = 2
+
+[node name="MightLabel" type="Label" parent="BoardPanel/PlayerRight/VBox" unique_id=949791278]
+layout_mode = 2
+
+[node name="BotLeft" type="PanelContainer" parent="BoardPanel" unique_id=93463687]
+layout_mode = 2
+script = ExtResource("4_c01mt")
+
+[node name="VBox" type="VBoxContainer" parent="BoardPanel/BotLeft" unique_id=1818136028]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="BoardPanel/BotLeft/VBox" unique_id=8953675]
+layout_mode = 2
+
+[node name="TierLabel" type="Label" parent="BoardPanel/BotLeft/VBox" unique_id=832729377]
+layout_mode = 2
+
+[node name="TypeLabel" type="Label" parent="BoardPanel/BotLeft/VBox" unique_id=1547712121]
+layout_mode = 2
+
+[node name="MightLabel" type="Label" parent="BoardPanel/BotLeft/VBox" unique_id=1801323455]
+layout_mode = 2
+
+[node name="BotCenter" type="PanelContainer" parent="BoardPanel" unique_id=1112605920]
+layout_mode = 2
+script = ExtResource("4_c01mt")
+
+[node name="VBox" type="VBoxContainer" parent="BoardPanel/BotCenter" unique_id=4956256]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="BoardPanel/BotCenter/VBox" unique_id=676620162]
+layout_mode = 2
+
+[node name="TierLabel" type="Label" parent="BoardPanel/BotCenter/VBox" unique_id=1708805029]
+layout_mode = 2
+
+[node name="TypeLabel" type="Label" parent="BoardPanel/BotCenter/VBox" unique_id=1369476512]
+layout_mode = 2
+
+[node name="MightLabel" type="Label" parent="BoardPanel/BotCenter/VBox" unique_id=1476728683]
+layout_mode = 2
+
+[node name="BotRight" type="PanelContainer" parent="BoardPanel" unique_id=1240117197]
+layout_mode = 2
+script = ExtResource("4_c01mt")
+
+[node name="VBox" type="VBoxContainer" parent="BoardPanel/BotRight" unique_id=1738542671]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="BoardPanel/BotRight/VBox" unique_id=525741421]
+layout_mode = 2
+
+[node name="TierLabel" type="Label" parent="BoardPanel/BotRight/VBox" unique_id=751948089]
+layout_mode = 2
+
+[node name="TypeLabel" type="Label" parent="BoardPanel/BotRight/VBox" unique_id=75024526]
+layout_mode = 2
+
+[node name="MightLabel" type="Label" parent="BoardPanel/BotRight/VBox" unique_id=1024646362]
+layout_mode = 2
 
 [node name="BenchPanel" type="HBoxContainer" parent="." unique_id=1970121094]
-offset_left = 3.0
-offset_top = 525.0
-offset_right = 1150.0
-offset_bottom = 644.0
+layout_mode = 0
+offset_left = 129.0
+offset_top = 553.0
+offset_right = 922.0
+offset_bottom = 628.0
 
 [node name="DraftPanel" type="VBoxContainer" parent="." unique_id=810661047]
-offset_left = 163.0
-offset_top = 1.0
-offset_right = 1002.0
-offset_bottom = 646.0
+layout_mode = 0
+offset_left = 144.0
+offset_top = 346.0
+offset_right = 934.0
+offset_bottom = 585.0
+script = ExtResource("4_nxtc6")
+
+[node name="CardsRow" type="HBoxContainer" parent="DraftPanel" unique_id=1260200773]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Card0" type="VBoxContainer" parent="DraftPanel/CardsRow" unique_id=2063518479]
+custom_minimum_size = Vector2(120, 150)
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="DraftPanel/CardsRow/Card0" unique_id=48332921]
+layout_mode = 2
+
+[node name="TypeLabel" type="Label" parent="DraftPanel/CardsRow/Card0" unique_id=1575463173]
+layout_mode = 2
+
+[node name="TierLabel" type="Label" parent="DraftPanel/CardsRow/Card0" unique_id=1686265940]
+layout_mode = 2
+
+[node name="CostLabel" type="Label" parent="DraftPanel/CardsRow/Card0" unique_id=853134155]
+layout_mode = 2
+
+[node name="Bid0" type="SpinBox" parent="DraftPanel/CardsRow/Card0" unique_id=1888729481]
+layout_mode = 2
+
+[node name="Card1" type="VBoxContainer" parent="DraftPanel/CardsRow" unique_id=1146136972]
+custom_minimum_size = Vector2(120, 150)
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="DraftPanel/CardsRow/Card1" unique_id=1095583560]
+layout_mode = 2
+
+[node name="TypeLabel" type="Label" parent="DraftPanel/CardsRow/Card1" unique_id=516451317]
+layout_mode = 2
+
+[node name="TierLabel" type="Label" parent="DraftPanel/CardsRow/Card1" unique_id=567429125]
+layout_mode = 2
+
+[node name="CostLabel" type="Label" parent="DraftPanel/CardsRow/Card1" unique_id=1157665383]
+layout_mode = 2
+
+[node name="Bid1" type="SpinBox" parent="DraftPanel/CardsRow/Card1" unique_id=912608751]
+layout_mode = 2
+
+[node name="Card2" type="VBoxContainer" parent="DraftPanel/CardsRow" unique_id=1055956778]
+custom_minimum_size = Vector2(120, 150)
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="DraftPanel/CardsRow/Card2" unique_id=155036293]
+layout_mode = 2
+
+[node name="TypeLabel" type="Label" parent="DraftPanel/CardsRow/Card2" unique_id=900902650]
+layout_mode = 2
+
+[node name="TierLabel" type="Label" parent="DraftPanel/CardsRow/Card2" unique_id=118803168]
+layout_mode = 2
+
+[node name="CostLabel" type="Label" parent="DraftPanel/CardsRow/Card2" unique_id=894566365]
+layout_mode = 2
+
+[node name="Bid2" type="SpinBox" parent="DraftPanel/CardsRow/Card2" unique_id=1605346446]
+layout_mode = 2
+
+[node name="BidsUsedLabel" type="Label" parent="DraftPanel" unique_id=777419184]
+layout_mode = 2
+
+[node name="TotalLabel" type="Label" parent="DraftPanel" unique_id=1766580544]
+layout_mode = 2
+
+[node name="ConfirmBtn" type="Button" parent="DraftPanel" unique_id=212421596]
+layout_mode = 2
+text = "Confirm"
 
 [node name="ActionPanel" type="VBoxContainer" parent="." unique_id=401326702]
-offset_left = 379.0
-offset_top = 398.0
-offset_right = 768.0
-offset_bottom = 534.0
+visible = false
+layout_mode = 0
+offset_left = 949.0
+offset_top = 348.0
+offset_right = 1141.0
+offset_bottom = 601.0
 script = ExtResource("1_elqb8")
 
+[node name="DeployBtn" type="Button" parent="ActionPanel" unique_id=160814645]
+layout_mode = 2
+text = "Deploy"
+
+[node name="RetreatBtn" type="Button" parent="ActionPanel" unique_id=2090009697]
+layout_mode = 2
+text = "Retreat"
+
+[node name="ShiftBtn" type="Button" parent="ActionPanel" unique_id=246730875]
+layout_mode = 2
+text = "Shift"
+
+[node name="HoldBtn" type="Button" parent="ActionPanel" unique_id=995117211]
+layout_mode = 2
+text = "Hold"
+
+[node name="UnitPicker" type="OptionButton" parent="ActionPanel" unique_id=649156951]
+layout_mode = 2
+
+[node name="LanePicker" type="OptionButton" parent="ActionPanel" unique_id=440228740]
+layout_mode = 2
+
+[node name="ConfirmBtn" type="Button" parent="ActionPanel" unique_id=933434228]
+layout_mode = 2
+text = "Confirm"
+
 [node name="CombatLog" type="ScrollContainer" parent="." unique_id=1516457289]
-offset_left = -1.0
-offset_top = 171.0
-offset_right = 198.0
-offset_bottom = 494.0
+layout_mode = 0
+offset_left = 3.0
+offset_top = 548.0
+offset_right = 296.0
+offset_bottom = 647.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CombatLog" unique_id=213595723]
 layout_mode = 2
