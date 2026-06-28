@@ -30,8 +30,6 @@ func _on_waiting_for_player(phase) -> void:
 		RoundManager.Phase.ACTION_COMMIT:
 			action_panel.refresh_available_actions()
 			action_panel.show()
-		RoundManager.Phase.EXTORT_PROMPT:
-			extort_prompt.show_prompt()
 			
 func _on_phase_changed(new_phase: RoundManager.Phase) -> void:
 	print("Phase changed to: ", RoundManager.Phase.keys()[new_phase])
