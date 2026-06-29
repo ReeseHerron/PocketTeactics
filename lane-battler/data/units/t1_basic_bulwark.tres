@@ -1,9 +1,11 @@
 [gd_resource type="Resource" script_class="UnitData" format=3 uid="uid://cxae3wr01aul5"]
 
-[ext_resource type="Script" uid="uid://c2jkvnhuwwiy3" path="res://data/units/UnitData.gd" id="1_up85v"]
+[ext_resource type="Script" uid="uid://c2jkvnhuwwiy3" path="res://data/units/UnitData.gd" id="1_54d6h"]
 
 [resource]
-script = ExtResource("1_up85v")
+script = ExtResource("1_54d6h")
+unit_id = 4
+fusion_group_id = 2
 display_name = "Basic Bulwark"
 unit_type = 2
 metadata/_custom_type_script = "uid://c2jkvnhuwwiy3"

@@ -1,56 +1,76 @@
+# src/FusionChecker.gd
+# Checks bench for fuseable pairs and produces fused units via UnitRegistry.
+# Called by RoundManager during the FUSION_CHECK phase.
 class_name FusionChecker
 extends RefCounted
 
-# Returns array of fusion events: {player_id, consumed: [UnitInstance, UnitInstance], result: UnitInstance}
-func check_and_fuse(player_id: int) -> Array:
-	var events = []
-	var changed = true
 
+# Returns an Array of fusion event Dictionaries:
+#   { player_id, consumed: [UnitInstance, UnitInstance], result: UnitInstance }
+func check_and_fuse(player_id: int) -> Array:
+	var events := []
+	var changed := true
+
+	# Loop until no more fusions are possible (handles chain fusions: T1→T2→T3).
 	while changed:
 		changed = false
-		var all_units = _get_all_units(player_id)
+		var all_units : Array = GameState.bench[player_id].duplicate()
 
 		for i in range(all_units.size()):
-			var unit_a = all_units[i]
+			var unit_a: UnitInstance = all_units[i]
 
 			for j in range(i + 1, all_units.size()):
-				var unit_b = all_units[j]
+				var unit_b: UnitInstance = all_units[j]
 
-				if unit_a.can_fuse_with(unit_b) and unit_a.data.tier < 3:
-					var fused = _create_fused_unit(unit_a, player_id)
+				if not unit_a.can_fuse_with(unit_b):
+					continue
 
-					_remove_unit(player_id, unit_a)
-					_remove_unit(player_id, unit_b)
-					_place_on_bench(player_id, fused)
+				var fused := _create_fused_unit(unit_a, player_id)
+				if fused == null:
+					continue  # Registry had no result (shouldn't happen; logged there)
 
-					events.append({
-						"player_id": player_id,
-						"consumed": [unit_a, unit_b],
-						"result": fused
-					})
+				_remove_unit(player_id, unit_a)
+				_remove_unit(player_id, unit_b)
+				_place_on_bench(player_id, fused)
 
-					changed = true
-					break
+				events.append({
+					"player_id": player_id,
+					"consumed": [unit_a, unit_b],
+					"result": fused,
+				})
+
+				EventBus.fusion_occurred.emit(player_id, fused)
+				changed = true
+				break
 
 			if changed:
 				break
 
 	return events
 
-func _get_all_units(player_id: int) -> Array:
-	return GameState.bench[player_id].duplicate()
+
+# ── Internal ──────────────────────────────────────────────────────────────────
 
 func _create_fused_unit(source: UnitInstance, owner: int) -> UnitInstance:
-	var new_data = source.data.duplicate()
-	new_data.tier = source.data.tier + 1
-	new_data.base_might = new_data.get_max_might()
-	return UnitInstance.new(new_data, owner)
+	# Ask the registry for the correct T(n+1) resource in this fusion line.
+	# No resource duplication or mutation — we get the real authored .tres file.
+	var result_data := UnitRegistry.get_fusion_result(
+		source.data.fusion_group_id,
+		source.data.tier + 1
+	)
+	if result_data == null:
+		return null
+	return UnitInstance.new(result_data, owner)
+
 
 func _remove_unit(player_id: int, unit: UnitInstance) -> void:
 	GameState.bench[player_id].erase(unit)
+	# Safety: also clear it from the board if it somehow ended up there.
 	for lane in range(3):
 		if GameState.board[player_id][lane] == unit:
 			GameState.board[player_id][lane] = null
 
+
 func _place_on_bench(player_id: int, unit: UnitInstance) -> void:
 	GameState.bench[player_id].append(unit)
+	EventBus.bench_changed.emit(player_id)

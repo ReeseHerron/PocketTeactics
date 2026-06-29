@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnitData" format=3 uid="uid://ddym2y6278xp3"]
+
+[ext_resource type="Script" uid="uid://c2jkvnhuwwiy3" path="res://data/units/UnitData.gd" id="1_bdeo6"]
+
+[resource]
+script = ExtResource("1_bdeo6")
+unit_id = 8
+fusion_group_id = 3
+display_name = "Basic Tactician"
+unit_type = 1
+tier = 2
+base_might = 6
+floor_cost = 3
+metadata/_custom_type_script = "uid://c2jkvnhuwwiy3"

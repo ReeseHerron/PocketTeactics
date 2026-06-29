@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://xe5kwofhcak5" path="res://src/Main.gd" id="1_rvslj"]
 [ext_resource type="Script" uid="uid://ycq6766hcjdr" path="res://src/StatusPanel.gd" id="2_vcsgt"]
 [ext_resource type="Script" uid="uid://bropqayc2nnun" path="res://scenes/ui/BoardPanel.gd" id="3_c01mt"]
-[ext_resource type="Script" uid="uid://dws56gwgjt5w7" path="res://scenes/ui/BoardSlot.gd" id="4_c01mt"]
+[ext_resource type="PackedScene" uid="uid://ljeibfqb5j7c" path="res://scenes/ui/BoardSlot.tscn" id="4_c01mt"]
 [ext_resource type="Script" uid="uid://d3ns3v8yuai34" path="res://scenes/ui/DraftPanel.gd" id="4_nxtc6"]
 
 [node name="Main" type="Control" unique_id=1571649950]
@@ -42,127 +42,56 @@ layout_mode = 2
 [node name="BoardPanel" type="GridContainer" parent="." unique_id=1802525335]
 custom_minimum_size = Vector2(400, 200)
 layout_mode = 0
-offset_left = 257.0
-offset_top = 93.0
-offset_right = 954.0
+offset_left = 168.0
+offset_top = 78.0
+offset_right = 955.0
 offset_bottom = 510.0
 theme_override_constants/h_separation = 100
 theme_override_constants/v_separation = 20
 columns = 3
 script = ExtResource("3_c01mt")
 
-[node name="PlayerLeft" type="PanelContainer" parent="BoardPanel" unique_id=69401314]
+[node name="HBoxContainer" type="HBoxContainer" parent="BoardPanel" unique_id=1536344893]
 layout_mode = 2
-script = ExtResource("4_c01mt")
+theme_override_constants/separation = 30
 
-[node name="VBox" type="VBoxContainer" parent="BoardPanel/PlayerLeft" unique_id=850477906]
-layout_mode = 2
-
-[node name="NameLabel" type="Label" parent="BoardPanel/PlayerLeft/VBox" unique_id=701775222]
+[node name="LaneLeft" type="VBoxContainer" parent="BoardPanel/HBoxContainer" unique_id=787200989]
 layout_mode = 2
 
-[node name="TierLabel" type="Label" parent="BoardPanel/PlayerLeft/VBox" unique_id=2121238375]
+[node name="LaneLabel" type="Label" parent="BoardPanel/HBoxContainer/LaneLeft" unique_id=88514713]
+layout_mode = 2
+text = "Left Flank"
+
+[node name="BotSlot" parent="BoardPanel/HBoxContainer/LaneLeft" unique_id=1139924275 instance=ExtResource("4_c01mt")]
 layout_mode = 2
 
-[node name="TypeLabel" type="Label" parent="BoardPanel/PlayerLeft/VBox" unique_id=1108070968]
+[node name="PlayerSlot" parent="BoardPanel/HBoxContainer/LaneLeft" unique_id=1379063949 instance=ExtResource("4_c01mt")]
 layout_mode = 2
 
-[node name="MightLabel" type="Label" parent="BoardPanel/PlayerLeft/VBox" unique_id=1750050044]
+[node name="LaneCenter" type="VBoxContainer" parent="BoardPanel/HBoxContainer" unique_id=158395244]
 layout_mode = 2
 
-[node name="PlayerCenter" type="PanelContainer" parent="BoardPanel" unique_id=1285566524]
+[node name="LaneLabel" type="Label" parent="BoardPanel/HBoxContainer/LaneCenter" unique_id=99142128]
 layout_mode = 2
-script = ExtResource("4_c01mt")
+text = "Center"
 
-[node name="VBox" type="VBoxContainer" parent="BoardPanel/PlayerCenter" unique_id=673512468]
-layout_mode = 2
-
-[node name="NameLabel" type="Label" parent="BoardPanel/PlayerCenter/VBox" unique_id=1332936671]
+[node name="BotSlot" parent="BoardPanel/HBoxContainer/LaneCenter" unique_id=913628350 instance=ExtResource("4_c01mt")]
 layout_mode = 2
 
-[node name="TierLabel" type="Label" parent="BoardPanel/PlayerCenter/VBox" unique_id=1358673311]
+[node name="PlayerSlot" parent="BoardPanel/HBoxContainer/LaneCenter" unique_id=2145290271 instance=ExtResource("4_c01mt")]
 layout_mode = 2
 
-[node name="TypeLabel" type="Label" parent="BoardPanel/PlayerCenter/VBox" unique_id=58718211]
+[node name="LaneRight" type="VBoxContainer" parent="BoardPanel/HBoxContainer" unique_id=1451257178]
 layout_mode = 2
 
-[node name="MightLabel" type="Label" parent="BoardPanel/PlayerCenter/VBox" unique_id=245174589]
+[node name="LaneLabel" type="Label" parent="BoardPanel/HBoxContainer/LaneRight" unique_id=1794426401]
+layout_mode = 2
+text = "Right Flank"
+
+[node name="BotSlot" parent="BoardPanel/HBoxContainer/LaneRight" unique_id=471384637 instance=ExtResource("4_c01mt")]
 layout_mode = 2
 
-[node name="PlayerRight" type="PanelContainer" parent="BoardPanel" unique_id=484122681]
-layout_mode = 2
-script = ExtResource("4_c01mt")
-
-[node name="VBox" type="VBoxContainer" parent="BoardPanel/PlayerRight" unique_id=1883665879]
-layout_mode = 2
-
-[node name="NameLabel" type="Label" parent="BoardPanel/PlayerRight/VBox" unique_id=824994193]
-layout_mode = 2
-
-[node name="TierLabel" type="Label" parent="BoardPanel/PlayerRight/VBox" unique_id=1703222392]
-layout_mode = 2
-
-[node name="TypeLabel" type="Label" parent="BoardPanel/PlayerRight/VBox" unique_id=24545310]
-layout_mode = 2
-
-[node name="MightLabel" type="Label" parent="BoardPanel/PlayerRight/VBox" unique_id=949791278]
-layout_mode = 2
-
-[node name="BotLeft" type="PanelContainer" parent="BoardPanel" unique_id=93463687]
-layout_mode = 2
-script = ExtResource("4_c01mt")
-
-[node name="VBox" type="VBoxContainer" parent="BoardPanel/BotLeft" unique_id=1818136028]
-layout_mode = 2
-
-[node name="NameLabel" type="Label" parent="BoardPanel/BotLeft/VBox" unique_id=8953675]
-layout_mode = 2
-
-[node name="TierLabel" type="Label" parent="BoardPanel/BotLeft/VBox" unique_id=832729377]
-layout_mode = 2
-
-[node name="TypeLabel" type="Label" parent="BoardPanel/BotLeft/VBox" unique_id=1547712121]
-layout_mode = 2
-
-[node name="MightLabel" type="Label" parent="BoardPanel/BotLeft/VBox" unique_id=1801323455]
-layout_mode = 2
-
-[node name="BotCenter" type="PanelContainer" parent="BoardPanel" unique_id=1112605920]
-layout_mode = 2
-script = ExtResource("4_c01mt")
-
-[node name="VBox" type="VBoxContainer" parent="BoardPanel/BotCenter" unique_id=4956256]
-layout_mode = 2
-
-[node name="NameLabel" type="Label" parent="BoardPanel/BotCenter/VBox" unique_id=676620162]
-layout_mode = 2
-
-[node name="TierLabel" type="Label" parent="BoardPanel/BotCenter/VBox" unique_id=1708805029]
-layout_mode = 2
-
-[node name="TypeLabel" type="Label" parent="BoardPanel/BotCenter/VBox" unique_id=1369476512]
-layout_mode = 2
-
-[node name="MightLabel" type="Label" parent="BoardPanel/BotCenter/VBox" unique_id=1476728683]
-layout_mode = 2
-
-[node name="BotRight" type="PanelContainer" parent="BoardPanel" unique_id=1240117197]
-layout_mode = 2
-script = ExtResource("4_c01mt")
-
-[node name="VBox" type="VBoxContainer" parent="BoardPanel/BotRight" unique_id=1738542671]
-layout_mode = 2
-
-[node name="NameLabel" type="Label" parent="BoardPanel/BotRight/VBox" unique_id=525741421]
-layout_mode = 2
-
-[node name="TierLabel" type="Label" parent="BoardPanel/BotRight/VBox" unique_id=751948089]
-layout_mode = 2
-
-[node name="TypeLabel" type="Label" parent="BoardPanel/BotRight/VBox" unique_id=75024526]
-layout_mode = 2
-
-[node name="MightLabel" type="Label" parent="BoardPanel/BotRight/VBox" unique_id=1024646362]
+[node name="PlayerSlot" parent="BoardPanel/HBoxContainer/LaneRight" unique_id=1192983395 instance=ExtResource("4_c01mt")]
 layout_mode = 2
 
 [node name="BenchPanel" type="HBoxContainer" parent="." unique_id=1970121094]
@@ -262,31 +191,16 @@ offset_right = 1141.0
 offset_bottom = 601.0
 script = ExtResource("1_elqb8")
 
-[node name="DeployBtn" type="Button" parent="ActionPanel" unique_id=160814645]
-layout_mode = 2
-text = "Deploy"
-
-[node name="RetreatBtn" type="Button" parent="ActionPanel" unique_id=2090009697]
-layout_mode = 2
-text = "Retreat"
-
-[node name="ShiftBtn" type="Button" parent="ActionPanel" unique_id=246730875]
-layout_mode = 2
-text = "Shift"
-
-[node name="HoldBtn" type="Button" parent="ActionPanel" unique_id=995117211]
-layout_mode = 2
-text = "Hold"
-
-[node name="UnitPicker" type="OptionButton" parent="ActionPanel" unique_id=649156951]
+[node name="PhaseLabel" type="Label" parent="ActionPanel" unique_id=1914808495]
 layout_mode = 2
 
-[node name="LanePicker" type="OptionButton" parent="ActionPanel" unique_id=440228740]
+[node name="ProjectedBoard" type="Label" parent="ActionPanel" unique_id=1785328256]
+visible = false
 layout_mode = 2
+autowrap_mode = 2
 
-[node name="ConfirmBtn" type="Button" parent="ActionPanel" unique_id=933434228]
+[node name="OptionsContainer" type="VBoxContainer" parent="ActionPanel" unique_id=2028648734]
 layout_mode = 2
-text = "Confirm"
 
 [node name="CombatLog" type="ScrollContainer" parent="." unique_id=1516457289]
 layout_mode = 0
@@ -297,3 +211,19 @@ offset_bottom = 647.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CombatLog" unique_id=213595723]
 layout_mode = 2
+
+[node name="PlansRevealLabel" type="Label" parent="." unique_id=1719243557]
+visible = false
+layout_mode = 0
+offset_left = 316.0
+offset_top = 2.0
+offset_right = 356.0
+offset_bottom = 25.0
+
+[node name="MatchOverLabel" type="Label" parent="." unique_id=440129407]
+visible = false
+layout_mode = 0
+offset_left = 484.0
+offset_top = 302.0
+offset_right = 524.0
+offset_bottom = 325.0

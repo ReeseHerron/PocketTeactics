@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="UnitData" format=3 uid="uid://cadpvwumftso6"]
+
+[ext_resource type="Script" uid="uid://c2jkvnhuwwiy3" path="res://data/units/UnitData.gd" id="1_v0iys"]
+
+[resource]
+script = ExtResource("1_v0iys")
+unit_id = 2
+fusion_group_id = 1
+display_name = "Basic Striker"
+tier = 2
+base_might = 6
+floor_cost = 3
+metadata/_custom_type_script = "uid://c2jkvnhuwwiy3"

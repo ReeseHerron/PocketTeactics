@@ -19,9 +19,9 @@ func build_pool(roster_a: Array, roster_b: Array) -> void:
 
 func _add_vanilla_units() -> void:
 	var vanilla_units = [
-		preload("res://data/units/striker_a.tres"),
-		preload("res://data/units/tactician_a.tres"),
-		preload("res://data/units/bulwark_a.tres"),
+		preload("res://data/units/t1_basic_striker.tres"),
+		preload("res://data/units/t1_basic_tactician.tres"),
+		preload("res://data/units/t1_basic_bulwark.tres"),
 	]
 
 	for unit in vanilla_units:

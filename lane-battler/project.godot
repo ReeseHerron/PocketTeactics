@@ -17,6 +17,8 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+EventBus="*uid://dhjvrertbilpd"
+UnitRegistry="*uid://cph22247su410"
 GameState="*uid://s5fjax2g430x"
 RoundManager="*uid://nvgvpkp3go7w"
 

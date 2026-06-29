@@ -1,9 +1,11 @@
 [gd_resource type="Resource" script_class="UnitData" format=3 uid="uid://cen3sjua1apbh"]
 
-[ext_resource type="Script" uid="uid://c2jkvnhuwwiy3" path="res://data/units/UnitData.gd" id="1_3y6pa"]
+[ext_resource type="Script" uid="uid://c2jkvnhuwwiy3" path="res://data/units/UnitData.gd" id="1_wkvnq"]
 
 [resource]
-script = ExtResource("1_3y6pa")
+script = ExtResource("1_wkvnq")
+unit_id = 7
+fusion_group_id = 3
 display_name = "Basic Tactician"
 unit_type = 1
 metadata/_custom_type_script = "uid://c2jkvnhuwwiy3"

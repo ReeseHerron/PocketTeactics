@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnitData" format=3 uid="uid://cxbs41pb3vb0k"]
+
+[ext_resource type="Script" uid="uid://c2jkvnhuwwiy3" path="res://data/units/UnitData.gd" id="1_5i2tl"]
+
+[resource]
+script = ExtResource("1_5i2tl")
+unit_id = 6
+fusion_group_id = 2
+display_name = "Basic Bulwark"
+unit_type = 2
+tier = 3
+base_might = 10
+floor_cost = 4
+metadata/_custom_type_script = "uid://c2jkvnhuwwiy3"
