@@ -55,7 +55,7 @@ func get_draft_bids() -> Dictionary:
 
 func _score_draft_unit(unit: UnitData, player_id: int) -> float:
 	var opponent_id := 1 - player_id
-	var score := 3.0
+	var score := 0.0
 
 	# Fusion completion: same fusion_group_id and same tier already on bench
 	for bench_unit in GameState.bench[player_id]:
@@ -222,8 +222,17 @@ func choose_deploy(player_id: int, projected_board: Array) -> Dictionary:
 	# SKIP is always an option
 	candidates.append({ "type": ActionExecutor.DeployType.SKIP, "score": 0.0 })
 
-	# DEPLOY: each bench unit into each empty lane on the projected board
-	for unit in GameState.bench[player_id]:
+	# Build available bench — exclude any unit already committed to Muster this turn.
+	# Without this, the bot could plan Muster(unitA) + Deploy(unitA), which
+	# resolves as Muster then silently fails the deploy.
+	var available_bench: Array = GameState.bench[player_id].duplicate()
+	if _chosen_maneuver.get("type") == ActionExecutor.ManeuverType.MUSTER:
+		var mustered: UnitInstance = _chosen_maneuver.get("unit")
+		if mustered != null:
+			available_bench.erase(mustered)
+
+	# DEPLOY: each available bench unit into each empty lane on the projected board
+	for unit in available_bench:
 		for lane in range(3):
 			if projected_board[player_id][lane] != null:
 				continue  # lane occupied after our maneuver

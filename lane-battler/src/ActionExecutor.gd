@@ -147,7 +147,12 @@ func _do_deploy(player_id: int, unit: UnitInstance, target_lane: int) -> void:
 		push_error("DEPLOY: target lane %d occupied for player %d" % [target_lane, player_id])
 		return
 	if not GameState.bench[player_id].has(unit):
-		push_error("DEPLOY: unit not on bench for player %d" % player_id)
+		var msg := "  ⚠ DEPLOY INVALID: %s's %s is not in bench — was it already used by Muster?" % [
+			"Player" if player_id == 0 else "Bot",
+			unit.display_str(),
+		]
+		print(msg)
+		push_error(msg)
 		return
 	GameState.bench[player_id].erase(unit)
 	GameState.board[player_id][target_lane] = unit

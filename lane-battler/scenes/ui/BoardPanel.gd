@@ -19,14 +19,14 @@ extends Control
 
 
 @onready var player_slots: Array = [
-	$LaneLeft/PlayerSlot,
-	$LaneCenter/PlayerSlot,
-	$LaneRight/PlayerSlot,
+	$HBoxContainer/LaneLeft/PlayerSlot,
+	$HBoxContainer/LaneCenter/PlayerSlot,
+	$HBoxContainer/LaneRight/PlayerSlot,
 ]
 @onready var bot_slots: Array = [
-	$LaneLeft/BotSlot,
-	$LaneCenter/BotSlot,
-	$LaneRight/BotSlot,
+	$HBoxContainer/LaneLeft/BotSlot,
+	$HBoxContainer/LaneCenter/BotSlot,
+	$HBoxContainer/LaneRight/BotSlot,
 ]
 
 

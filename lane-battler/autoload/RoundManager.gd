@@ -100,16 +100,16 @@ func _set_phase(p: Phase) -> void:
 func _do_round_start() -> void:
 	print("")
 	print("========== ROUND %d ==========" % GameState.round_number)
+	# Apply income BEFORE printing gold so the header reflects what's actually spendable
+	if GameState.round_number > 1:
+		_economy_manager.apply_base_income()
+		print("  Income: +2 gold each")
 	print("Player — VP: %d  Gold: %d" % [GameState.vp[0], GameState.gold[0]])
 	print("Bot    — VP: %d  Gold: %d" % [GameState.vp[1], GameState.gold[1]])
 	_print_board_state()
 
 	# v4: clear fresh flags from previous round
 	GameState.clear_fresh_flags()
-
-	# v4: income at round START (skip round 1 — starting gold is already 3)
-	if GameState.round_number > 1:
-		_economy_manager.apply_base_income()
 
 	_set_phase(Phase.BENCH_RECOVERY)
 	call_deferred("advance")

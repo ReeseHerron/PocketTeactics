@@ -123,8 +123,16 @@ func _build_deploy_options(projected: Array) -> void:
 		_submit_deploy({ "type": ActionExecutor.DeployType.SKIP })
 	)
 
-	# DEPLOY — each bench unit into each empty lane on the projected board
-	for unit in GameState.bench[0]:
+	# Exclude any unit already committed to Muster this turn.
+	# _committed_maneuver is set when the player confirmed their maneuver choice.
+	var available_bench: Array = GameState.bench[0].duplicate()
+	if _committed_maneuver.get("type") == ActionExecutor.ManeuverType.MUSTER:
+		var mustered: UnitInstance = _committed_maneuver.get("unit")
+		if mustered != null:
+			available_bench.erase(mustered)
+
+	# DEPLOY — each available bench unit into each empty lane on the projected board
+	for unit in available_bench:
 		for lane in range(3):
 			if projected[0][lane] != null:
 				continue  # lane occupied after our maneuver
