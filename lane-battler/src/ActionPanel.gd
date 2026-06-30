@@ -85,7 +85,7 @@ func _build_maneuver_options() -> void:
 			# Capture loop variables explicitly — closures share the loop scope
 			var captured_unit := unit
 			var captured_from := lane
-			var captured_to   := adj
+			var captured_to   : int = adj
 			_add_button(
 				"Shift  %s:  %s → %s" % [
 					unit.data.display_name,
@@ -104,7 +104,7 @@ func _build_maneuver_options() -> void:
 	if not GameState.has_any_board_unit(0):
 		for unit in GameState.bench[0]:
 			for lane in range(3):
-				var captured_unit := unit
+				var captured_unit : UnitInstance = unit
 				var captured_lane := lane
 				_add_button(
 					"Muster  %s  to %s" % [unit.data.display_name, _lane_name(lane)],
@@ -128,7 +128,7 @@ func _build_deploy_options(projected: Array) -> void:
 		for lane in range(3):
 			if projected[0][lane] != null:
 				continue  # lane occupied after our maneuver
-			var captured_unit := unit
+			var captured_unit : UnitInstance = unit
 			var captured_lane := lane
 			_add_button(
 				"Deploy  %s  to %s" % [unit.data.display_name, _lane_name(lane)],

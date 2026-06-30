@@ -88,6 +88,7 @@ func advance() -> void:
 func _set_phase(p: Phase) -> void:
 	if GameState.round_number > MAX_ROUNDS:
 		push_error("RoundManager: exceeded %d rounds — match stalled." % MAX_ROUNDS)
+		current_phase = Phase.MATCH_OVER
 		EventBus.match_over.emit(-1)
 		return
 	current_phase = p

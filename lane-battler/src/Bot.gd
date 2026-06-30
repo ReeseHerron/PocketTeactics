@@ -55,7 +55,7 @@ func get_draft_bids() -> Dictionary:
 
 func _score_draft_unit(unit: UnitData, player_id: int) -> float:
 	var opponent_id := 1 - player_id
-	var score := 0.0
+	var score := 3.0
 
 	# Fusion completion: same fusion_group_id and same tier already on bench
 	for bench_unit in GameState.bench[player_id]:
@@ -80,8 +80,7 @@ func _score_draft_unit(unit: UnitData, player_id: int) -> float:
 	if GameState.board[player_id][1] == null:
 		score += 2.0
 
-	_add_noise_value(score)
-	return score
+	return _add_noise_value(score)
 
 
 func _calculate_bid(score: float, min_bid: int, budget: int) -> int:
