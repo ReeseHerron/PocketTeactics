@@ -66,7 +66,8 @@ layout_mode = 2
 
 [node name="LaneLabel" type="Label" parent="BoardPanel/HBoxContainer/LaneLeft" unique_id=88514713]
 layout_mode = 2
-text = "Left Flank"
+text = "LEFT FLANK"
+horizontal_alignment = 1
 
 [node name="BotSlot" parent="BoardPanel/HBoxContainer/LaneLeft" unique_id=1139924275 instance=ExtResource("4_c01mt")]
 layout_mode = 2
@@ -74,12 +75,20 @@ layout_mode = 2
 [node name="PlayerSlot" parent="BoardPanel/HBoxContainer/LaneLeft" unique_id=1379063949 instance=ExtResource("4_c01mt")]
 layout_mode = 2
 
+[node name="ScoringLabel" type="Label" parent="BoardPanel/HBoxContainer/LaneLeft" unique_id=1313592164]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Control Both Flanks
+To Score VP"
+horizontal_alignment = 1
+
 [node name="LaneCenter" type="VBoxContainer" parent="BoardPanel/HBoxContainer" unique_id=158395244]
 layout_mode = 2
 
 [node name="LaneLabel" type="Label" parent="BoardPanel/HBoxContainer/LaneCenter" unique_id=99142128]
 layout_mode = 2
-text = "Center"
+text = "CENTER"
+horizontal_alignment = 1
 
 [node name="BotSlot" parent="BoardPanel/HBoxContainer/LaneCenter" unique_id=913628350 instance=ExtResource("4_c01mt")]
 layout_mode = 2
@@ -87,12 +96,20 @@ layout_mode = 2
 [node name="PlayerSlot" parent="BoardPanel/HBoxContainer/LaneCenter" unique_id=2145290271 instance=ExtResource("4_c01mt")]
 layout_mode = 2
 
+[node name="ScoringLabel" type="Label" parent="BoardPanel/HBoxContainer/LaneCenter" unique_id=1099294139]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Hold Center For Entire Turn
+To Score VP"
+horizontal_alignment = 1
+
 [node name="LaneRight" type="VBoxContainer" parent="BoardPanel/HBoxContainer" unique_id=1451257178]
 layout_mode = 2
 
 [node name="LaneLabel" type="Label" parent="BoardPanel/HBoxContainer/LaneRight" unique_id=1794426401]
 layout_mode = 2
-text = "Right Flank"
+text = "RIGHT FLANK"
+horizontal_alignment = 1
 
 [node name="BotSlot" parent="BoardPanel/HBoxContainer/LaneRight" unique_id=471384637 instance=ExtResource("4_c01mt")]
 layout_mode = 2
@@ -100,16 +117,21 @@ layout_mode = 2
 [node name="PlayerSlot" parent="BoardPanel/HBoxContainer/LaneRight" unique_id=1192983395 instance=ExtResource("4_c01mt")]
 layout_mode = 2
 
-[node name="BenchPanel" type="HBoxContainer" parent="." unique_id=1970121094]
-layout_mode = 0
-offset_left = 439.0
-offset_top = 597.0
-offset_right = 1278.0
-offset_bottom = 1046.0
-script = ExtResource("5_nxtc6")
-
-[node name="Label" type="Label" parent="BenchPanel" unique_id=543916949]
+[node name="ScoringLabel" type="Label" parent="BoardPanel/HBoxContainer/LaneRight" unique_id=658065571]
 layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Control Both Flanks
+To Score VP"
+horizontal_alignment = 1
+
+[node name="BenchPanel" type="HBoxContainer" parent="." unique_id=1970121094]
+custom_minimum_size = Vector2(400, 20)
+layout_mode = 0
+offset_left = 525.0
+offset_top = 747.0
+offset_right = 1205.0
+offset_bottom = 1018.0
+script = ExtResource("5_nxtc6")
 
 [node name="DraftPanel" type="VBoxContainer" parent="." unique_id=810661047]
 layout_mode = 0
@@ -123,62 +145,104 @@ script = ExtResource("4_nxtc6")
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Card0" type="VBoxContainer" parent="DraftPanel/CardsRow" unique_id=2063518479]
+[node name="Card0" type="Panel" parent="DraftPanel/CardsRow" unique_id=1642606463]
 custom_minimum_size = Vector2(120, 150)
 layout_mode = 2
 
 [node name="NameLabel" type="Label" parent="DraftPanel/CardsRow/Card0" unique_id=48332921]
-layout_mode = 2
+layout_mode = 0
+offset_right = 120.0
+offset_bottom = 23.0
 
 [node name="TypeLabel" type="Label" parent="DraftPanel/CardsRow/Card0" unique_id=1575463173]
-layout_mode = 2
+layout_mode = 0
+offset_top = 27.0
+offset_right = 120.0
+offset_bottom = 50.0
 
 [node name="TierLabel" type="Label" parent="DraftPanel/CardsRow/Card0" unique_id=1686265940]
-layout_mode = 2
+layout_mode = 0
+offset_top = 54.0
+offset_right = 120.0
+offset_bottom = 77.0
 
 [node name="CostLabel" type="Label" parent="DraftPanel/CardsRow/Card0" unique_id=853134155]
-layout_mode = 2
+layout_mode = 0
+offset_top = 81.0
+offset_right = 120.0
+offset_bottom = 104.0
 
 [node name="Bid0" type="SpinBox" parent="DraftPanel/CardsRow/Card0" unique_id=1888729481]
-layout_mode = 2
+layout_mode = 0
+offset_top = 108.0
+offset_right = 120.0
+offset_bottom = 139.0
 
-[node name="Card1" type="VBoxContainer" parent="DraftPanel/CardsRow" unique_id=1146136972]
+[node name="Card1" type="Panel" parent="DraftPanel/CardsRow" unique_id=2095515332]
 custom_minimum_size = Vector2(120, 150)
 layout_mode = 2
 
 [node name="NameLabel" type="Label" parent="DraftPanel/CardsRow/Card1" unique_id=1095583560]
-layout_mode = 2
+layout_mode = 0
+offset_right = 120.0
+offset_bottom = 23.0
 
 [node name="TypeLabel" type="Label" parent="DraftPanel/CardsRow/Card1" unique_id=516451317]
-layout_mode = 2
+layout_mode = 0
+offset_top = 27.0
+offset_right = 120.0
+offset_bottom = 50.0
 
 [node name="TierLabel" type="Label" parent="DraftPanel/CardsRow/Card1" unique_id=567429125]
-layout_mode = 2
+layout_mode = 0
+offset_top = 54.0
+offset_right = 120.0
+offset_bottom = 77.0
 
 [node name="CostLabel" type="Label" parent="DraftPanel/CardsRow/Card1" unique_id=1157665383]
-layout_mode = 2
+layout_mode = 0
+offset_top = 81.0
+offset_right = 120.0
+offset_bottom = 104.0
 
 [node name="Bid1" type="SpinBox" parent="DraftPanel/CardsRow/Card1" unique_id=912608751]
-layout_mode = 2
+layout_mode = 0
+offset_top = 108.0
+offset_right = 120.0
+offset_bottom = 139.0
 
-[node name="Card2" type="VBoxContainer" parent="DraftPanel/CardsRow" unique_id=1055956778]
+[node name="Card2" type="Panel" parent="DraftPanel/CardsRow" unique_id=1152661466]
 custom_minimum_size = Vector2(120, 150)
 layout_mode = 2
 
 [node name="NameLabel" type="Label" parent="DraftPanel/CardsRow/Card2" unique_id=155036293]
-layout_mode = 2
+layout_mode = 0
+offset_right = 120.0
+offset_bottom = 23.0
 
 [node name="TypeLabel" type="Label" parent="DraftPanel/CardsRow/Card2" unique_id=900902650]
-layout_mode = 2
+layout_mode = 0
+offset_top = 27.0
+offset_right = 120.0
+offset_bottom = 50.0
 
 [node name="TierLabel" type="Label" parent="DraftPanel/CardsRow/Card2" unique_id=118803168]
-layout_mode = 2
+layout_mode = 0
+offset_top = 54.0
+offset_right = 120.0
+offset_bottom = 77.0
 
 [node name="CostLabel" type="Label" parent="DraftPanel/CardsRow/Card2" unique_id=894566365]
-layout_mode = 2
+layout_mode = 0
+offset_top = 81.0
+offset_right = 120.0
+offset_bottom = 104.0
 
 [node name="Bid2" type="SpinBox" parent="DraftPanel/CardsRow/Card2" unique_id=1605346446]
-layout_mode = 2
+layout_mode = 0
+offset_top = 108.0
+offset_right = 120.0
+offset_bottom = 139.0
 
 [node name="BidsUsedLabel" type="Label" parent="DraftPanel" unique_id=777419184]
 layout_mode = 2
@@ -224,10 +288,10 @@ layout_mode = 2
 [node name="MatchOverLabel" type="Label" parent="." unique_id=440129407]
 visible = false
 layout_mode = 0
-offset_left = 484.0
-offset_top = 302.0
-offset_right = 524.0
-offset_bottom = 325.0
+offset_left = 811.0
+offset_top = 21.0
+offset_right = 906.0
+offset_bottom = 58.0
 
 [node name="StepLabel" type="Label" parent="." unique_id=2035947046]
 visible = false
@@ -240,8 +304,8 @@ offset_bottom = 46.0
 [node name="ContinueBtn" type="Button" parent="." unique_id=493335789]
 visible = false
 layout_mode = 0
-offset_left = 811.0
-offset_top = 571.0
-offset_right = 919.0
-offset_bottom = 605.0
+offset_left = 790.0
+offset_top = 606.0
+offset_right = 928.0
+offset_bottom = 663.0
 text = "Continue"

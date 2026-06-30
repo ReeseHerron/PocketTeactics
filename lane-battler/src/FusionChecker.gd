@@ -1,50 +1,55 @@
 # src/FusionChecker.gd
-# Checks bench for fuseable pairs and produces fused units via UnitRegistry.
-# Called by RoundManager during the FUSION_CHECK phase.
+# Checks bench for fuseable triples and produces fused units via UnitRegistry.
+# Fusion requires 3 identical T1 units → 1 T2 unit.
+# T2 units do not fuse further unless a special unit type allows it in future.
 class_name FusionChecker
 extends RefCounted
 
 
 # Returns an Array of fusion event Dictionaries:
-#   { player_id, consumed: [UnitInstance, UnitInstance], result: UnitInstance }
+#   { player_id, consumed: [Unit, Unit, Unit], result: UnitInstance }
 func check_and_fuse(player_id: int) -> Array:
 	var events := []
 	var changed := true
 
-	# Loop until no more fusions are possible (handles chain fusions: T1→T2→T3).
+	# Loop until no more fusions are possible.
 	while changed:
 		changed = false
-		var all_units : Array = GameState.bench[player_id].duplicate()
 
-		for i in range(all_units.size()):
-			var unit_a: UnitInstance = all_units[i]
+		# Group eligible bench units by fusion_group_id + tier.
+		# Only T1 fuses for now; T2→T3 can be added later per unit type.
+		var groups: Dictionary = {}
+		for unit in GameState.bench[player_id]:
+			if unit.data.tier != 1 or unit.data.fusion_group_id == 0:
+				continue
+			var key: String = "%d_%d" % [unit.data.fusion_group_id, unit.data.tier]
+			if not groups.has(key):
+				groups[key] = []
+			groups[key].append(unit)
 
-			for j in range(i + 1, all_units.size()):
-				var unit_b: UnitInstance = all_units[j]
+		# Look for any group of 3+
+		for key in groups:
+			var group: Array = groups[key]
+			if group.size() < 3:
+				continue
 
-				if not unit_a.can_fuse_with(unit_b):
-					continue
+			var consumed: Array = [group[0], group[1], group[2]]
+			var fused: UnitInstance = _create_fused_unit(consumed[0], player_id)
+			if fused == null:
+				continue
 
-				var fused := _create_fused_unit(unit_a, player_id)
-				if fused == null:
-					continue  # Registry had no result (shouldn't happen; logged there)
+			for unit in consumed:
+				_remove_unit(player_id, unit)
+			_place_on_bench(player_id, fused)
 
-				_remove_unit(player_id, unit_a)
-				_remove_unit(player_id, unit_b)
-				_place_on_bench(player_id, fused)
-
-				events.append({
-					"player_id": player_id,
-					"consumed": [unit_a, unit_b],
-					"result": fused,
-				})
-
-				EventBus.fusion_occurred.emit(player_id, fused)
-				changed = true
-				break
-
-			if changed:
-				break
+			events.append({
+				"player_id": player_id,
+				"consumed":  consumed,
+				"result":    fused,
+			})
+			EventBus.fusion_occurred.emit(player_id, fused)
+			changed = true
+			break
 
 	return events
 

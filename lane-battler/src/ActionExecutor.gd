@@ -86,6 +86,7 @@ func _do_retreat(player_id: int, unit: UnitInstance) -> void:
 			# v4: retreat does NOT heal. Bench recovery heals at round start.
 			GameState.bench[player_id].append(unit)
 			EventBus.bench_changed.emit(player_id)
+			EventBus.unit_benched.emit(player_id)
 			print("    %s retreats %s from lane %d" % [
 				"Player" if player_id == 0 else "Bot",
 				unit.display_str(), lane

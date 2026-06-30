@@ -9,6 +9,6 @@ fusion_group_id = 3
 display_name = "Basic Tactician"
 unit_type = 1
 tier = 2
-base_might = 6
+base_might = 7
 floor_cost = 3
 metadata/_custom_type_script = "uid://c2jkvnhuwwiy3"

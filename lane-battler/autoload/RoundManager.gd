@@ -56,6 +56,7 @@ func _ready() -> void:
 	_action_executor = ActionExecutor.new()
 	_economy_manager = EconomyManager.new()
 	_bot            = Bot.new()
+	EventBus.unit_benched.connect(_on_unit_benched)
 
 
 func start_match(roster_a: Array, roster_b: Array) -> void:
@@ -155,6 +156,7 @@ func _do_draft_resolve() -> void:
 			var new_unit := UnitInstance.new(unit_data, winner)
 			GameState.bench[winner].append(new_unit)
 			EventBus.bench_changed.emit(winner)
+			EventBus.unit_benched.emit(winner)
 
 		results.append({
 			"unit_index": i,
@@ -415,6 +417,22 @@ func _do_victory_check() -> void:
 
 
 # ── Player submission functions (called by UI) ────────────────────────────────
+func _on_unit_benched(player_id: int) -> void:
+	_try_fuse(player_id)
+ 
+ 
+func _try_fuse(player_id: int) -> void:
+	var events: Array = _fusion_checker.check_and_fuse(player_id)
+	for e in events:
+		var who: String = "Player" if e.player_id == 0 else "Bot"
+		print("  FUSION: %s fused %s + %s + %s → %s" % [
+			who,
+			e.consumed[0].display_str(),
+			e.consumed[1].display_str(),
+			e.consumed[2].display_str(),
+			e.result.display_str(),
+		])
+
 func submit_continue() -> void:
 	call_deferred("advance")
 	

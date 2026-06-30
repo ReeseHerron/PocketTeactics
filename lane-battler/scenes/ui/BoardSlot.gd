@@ -18,6 +18,8 @@ extends PanelContainer
 
 
 func setup(unit: UnitInstance, lane: int, is_bot: bool) -> void:
+	_apply_color(unit)
+	
 	if unit == null:
 		name_label.text  = "Empty"
 		type_label.text  = "_"
@@ -31,8 +33,17 @@ func setup(unit: UnitInstance, lane: int, is_bot: bool) -> void:
 	might_label.text = "%d / %d" % [unit.current_might, unit.data.get_max_might()]
 
 	if unit.is_fresh:
-		fresh_label.text = "(fresh — can't score)"
+		fresh_label.text = "⟳ Moved"
 		
 	else:
-		fresh_label.text = "★ Established"
+		fresh_label.text = "★ Holding"
 	fresh_label.show()
+
+func _apply_color(unit: UnitInstance) -> void:
+	var style := StyleBoxFlat.new()
+	style.bg_color = unit.data.get_color() if unit != null else Color(0.18, 0.18, 0.18)
+	style.corner_radius_top_left    = 4
+	style.corner_radius_top_right   = 4
+	style.corner_radius_bottom_left  = 4
+	style.corner_radius_bottom_right = 4
+	add_theme_stylebox_override("panel", style)

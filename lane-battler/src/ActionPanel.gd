@@ -49,7 +49,9 @@ func show_deploy_step() -> void:
 
 
 # ── Option builders ───────────────────────────────────────────────────────────
-
+func _unit_label(unit: UnitInstance) -> String:
+	return "T%d %s" % [unit.data.tier, unit.data.display_name]
+ 
 func _build_maneuver_options() -> void:
 	# SKIP — always available
 	_add_button("Skip (do nothing)", func():
@@ -64,7 +66,7 @@ func _build_maneuver_options() -> void:
 		var captured_unit := unit
 		var captured_lane := lane
 		_add_button(
-			"Retreat  %s  from %s" % [unit.data.display_name, _lane_name(lane)],
+			"Retreat  %s  from %s" % [_unit_label(unit), _lane_name(lane)],
 			func():
 				_submit_maneuver({
 					"type": ActionExecutor.ManeuverType.RETREAT,
@@ -88,7 +90,7 @@ func _build_maneuver_options() -> void:
 			var captured_to   : int = adj
 			_add_button(
 				"Shift  %s:  %s → %s" % [
-					unit.data.display_name,
+					_unit_label(unit),
 					_lane_name(lane),
 					_lane_name(adj)
 				],
@@ -107,7 +109,7 @@ func _build_maneuver_options() -> void:
 				var captured_unit : UnitInstance = unit
 				var captured_lane := lane
 				_add_button(
-					"Muster  %s  to %s" % [unit.data.display_name, _lane_name(lane)],
+					"Muster  %s  to %s" % [_unit_label(unit), _lane_name(lane)],
 					func():
 						_submit_maneuver({
 							"type":        ActionExecutor.ManeuverType.MUSTER,
@@ -139,7 +141,7 @@ func _build_deploy_options(projected: Array) -> void:
 			var captured_unit : UnitInstance = unit
 			var captured_lane := lane
 			_add_button(
-				"Deploy  %s  to %s" % [unit.data.display_name, _lane_name(lane)],
+				"Deploy  %s  to %s" % [_unit_label(unit), _lane_name(lane)],
 				func():
 					_submit_deploy({
 						"type":        ActionExecutor.DeployType.DEPLOY,

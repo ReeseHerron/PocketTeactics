@@ -1,6 +1,8 @@
 class_name EconomyManager
 extends RefCounted
 
+var BASE_INCOME: int = 3
+
 func apply_lane_rewards(lane_results: Array) -> void:
 	for result in lane_results:
 		var cid = result.claimant
@@ -12,5 +14,5 @@ func apply_lane_rewards(lane_results: Array) -> void:
 			GameState.add_vp(cid, result.vp_reward)
 
 func apply_base_income() -> void:
-	GameState.add_gold(0, 2)
-	GameState.add_gold(1, 2)
+	GameState.add_gold(0, BASE_INCOME)
+	GameState.add_gold(1, BASE_INCOME)

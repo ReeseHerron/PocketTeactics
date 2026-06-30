@@ -37,6 +37,7 @@ signal plans_revealed(player_plan: Dictionary, bot_plan: Dictionary)
 # ── Board / Bench ────────────────────────────────────────────────────────────
 signal board_changed()
 signal bench_changed(player_id: int)
+signal unit_benched(player_id: int)
 
 
 # ── Combat / Resolution ──────────────────────────────────────────────────────

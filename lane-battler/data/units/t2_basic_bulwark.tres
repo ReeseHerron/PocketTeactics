@@ -9,6 +9,6 @@ fusion_group_id = 2
 display_name = "Basic Bulwark"
 unit_type = 2
 tier = 2
-base_might = 6
+base_might = 7
 floor_cost = 3
 metadata/_custom_type_script = "uid://c2jkvnhuwwiy3"

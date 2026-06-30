@@ -26,6 +26,13 @@ func populate(units: Array) -> void:
 		card.get_node("NameLabel").text = unit.display_name
 		card.get_node("TypeLabel").text = unit.get_type_name()
 		card.get_node("CostLabel").text = "Floor: %d" % unit.floor_cost
+		var style := StyleBoxFlat.new()
+		style.bg_color                   = unit.get_color()
+		style.corner_radius_top_left     = 4
+		style.corner_radius_top_right    = 4
+		style.corner_radius_bottom_left  = 4
+		style.corner_radius_bottom_right = 4
+		card.add_theme_stylebox_override("panel", style)
 		bid_inputs[i].value = 0
 		bid_inputs[i].min_value = 0
 		bid_inputs[i].max_value = GameState.gold[0]

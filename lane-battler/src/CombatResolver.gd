@@ -1,18 +1,11 @@
 # src/CombatResolver.gd
-# Resolves combat in a single lane and determines the claimant.
+# Resolves combat in a single lane and determines gold and VP outcomes.
 #
-# v4 Fresh Unit Claim Rule:
-#   Established unit, uncontested lane  → claims
-#   Established unit, wins combat       → claims
-#   Fresh unit, uncontested lane        → claims
-#   Fresh unit, wins combat             → does NOT claim this round
+# Gold:   any sole surviving unit earns +1 gold (all lanes)
+# VP:     Center — unit must be established (is_fresh == false, held position all turn)
+#         Flanks — any sole unit earns flank VP regardless of freshness
 #
-# "Fresh" = unit.is_fresh is true (set when deployed/mustered this round).
-
-# Gold:  any sole surviving unit earns its owner +1 gold
-# VP:    established unit always; fresh unit only if lane was uncontested
-#
-# "Fresh" = unit.is_fresh is true (deployed, mustered, or shifted this round).
+# "Fresh" = unit.is_fresh is true (set when deployed, mustered, or shifted this round).
 class_name CombatResolver
 extends RefCounted
 
@@ -67,26 +60,34 @@ func resolve_lane(lane: int) -> Dictionary:
 		entry["destroyed_b"] = true
 
 	# ── Determine gold_winner and vp_eligible ────────────────────────────────
-	#   Established + no combat   → gold + VP
-	#   Established + wins combat → gold + VP
-	#   Fresh + no combat         → gold + VP   (shifted/deployed into empty lane)
-	#   Fresh + wins combat       → gold only   (moved into resistance, not held)
+	# Gold:   any sole surviving unit earns +1 gold (all lanes, always)
+	# VP:     Center (lane 1) — must be established (is_fresh == false)
+	#         Flanks (lane 0/2) — any sole unit counts toward both-flank bonus
 	if entry["combat"]:
 		if a_alive and not b_alive:
 			entry["gold_winner"] = 0
-			entry["vp_eligible"] = -1 if unit_a.is_fresh else 0
+			entry["vp_eligible"] = _vp_eligible(unit_a, lane)
 		elif b_alive and not a_alive:
 			entry["gold_winner"] = 1
-			entry["vp_eligible"] = -1 if unit_b.is_fresh else 1
+			entry["vp_eligible"] = _vp_eligible(unit_b, lane)
+		# Both dead or both alive → no gold, no VP
 	else:
+		# Uncontested lane
 		if a_alive:
 			entry["gold_winner"] = 0
-			entry["vp_eligible"] = 0
+			entry["vp_eligible"] = _vp_eligible(unit_a, lane)
 		elif b_alive:
 			entry["gold_winner"] = 1
-			entry["vp_eligible"] = 1
+			entry["vp_eligible"] = _vp_eligible(unit_b, lane)
 
 	return entry
+
+
+func _vp_eligible(unit: UnitInstance, lane: int) -> int:
+	if lane == 1:  # Center: must have held position all turn (established)
+		return -1 if unit.is_fresh else unit.owner_id
+	else:          # Flanks: any sole unit counts
+		return unit.owner_id
 
 
 func _apply_combat(

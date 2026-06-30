@@ -59,14 +59,20 @@ enum UnitType { STRIKER, TACTICIAN, BULWARK }
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
-
+func get_color() -> Color:
+	match unit_type:
+		UnitType.STRIKER:   return Color(0.71, 0.212, 0.21, 1.0)
+		UnitType.BULWARK:   return Color(0.263, 0.399, 0.784, 1.0)
+		UnitType.TACTICIAN: return Color(0.217, 0.631, 0.357, 1.0)
+	return Color(0.2, 0.2, 0.2)
+	
 func get_max_might() -> int:
 	if base_might > 0:
 		return base_might
 	# Fallback in case base_might wasn't set in the inspector.
 	match tier:
 		1: return 4
-		2: return 6
+		2: return 7
 		3: return 10
 	return 4
 
