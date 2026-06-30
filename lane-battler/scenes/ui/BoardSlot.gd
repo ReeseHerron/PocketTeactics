@@ -30,7 +30,8 @@ func setup(unit: UnitInstance, lane: int, is_bot: bool) -> void:
 	might_label.text = "%d / %d" % [unit.current_might, unit.data.get_max_might()]
 
 	if unit.is_fresh:
-		fresh_label.text = "(fresh — cannot claim after combat)"
-		fresh_label.show()
+		fresh_label.text = "(fresh — can't score)"
+		
 	else:
-		fresh_label.hide()
+		fresh_label.text = "★ Established"
+	fresh_label.show()

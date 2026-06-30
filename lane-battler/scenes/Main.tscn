@@ -13,16 +13,18 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = 768.0
+offset_bottom = 432.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_rvslj")
 
 [node name="StatusPanel" type="VBoxContainer" parent="." unique_id=1601887717]
 layout_mode = 0
-offset_left = 2.0
-offset_top = 3.0
-offset_right = 253.0
-offset_bottom = 176.0
+offset_left = 27.0
+offset_top = 28.0
+offset_right = 278.0
+offset_bottom = 201.0
 script = ExtResource("2_vcsgt")
 
 [node name="RoundLabel" type="Label" parent="StatusPanel" unique_id=1409372623]
@@ -46,10 +48,10 @@ layout_mode = 2
 [node name="BoardPanel" type="GridContainer" parent="." unique_id=1802525335]
 custom_minimum_size = Vector2(400, 200)
 layout_mode = 0
-offset_left = 235.0
-offset_top = 88.0
-offset_right = 1022.0
-offset_bottom = 520.0
+offset_left = 528.0
+offset_top = 72.0
+offset_right = 1315.0
+offset_bottom = 543.0
 theme_override_constants/h_separation = 100
 theme_override_constants/v_separation = 20
 columns = 3
@@ -100,10 +102,10 @@ layout_mode = 2
 
 [node name="BenchPanel" type="HBoxContainer" parent="." unique_id=1970121094]
 layout_mode = 0
-offset_left = 140.0
-offset_top = 496.0
-offset_right = 710.0
-offset_bottom = 571.0
+offset_left = 439.0
+offset_top = 597.0
+offset_right = 1278.0
+offset_bottom = 1046.0
 script = ExtResource("5_nxtc6")
 
 [node name="Label" type="Label" parent="BenchPanel" unique_id=543916949]
@@ -111,10 +113,10 @@ layout_mode = 2
 
 [node name="DraftPanel" type="VBoxContainer" parent="." unique_id=810661047]
 layout_mode = 0
-offset_left = 689.0
-offset_top = 47.0
-offset_right = 1479.0
-offset_bottom = 286.0
+offset_left = 1355.0
+offset_top = 86.0
+offset_right = 2145.0
+offset_bottom = 325.0
 script = ExtResource("4_nxtc6")
 
 [node name="CardsRow" type="HBoxContainer" parent="DraftPanel" unique_id=1260200773]
@@ -192,10 +194,10 @@ text = "Confirm"
 
 [node name="ActionPanel" type="VBoxContainer" parent="." unique_id=401326702]
 layout_mode = 0
-offset_left = 791.0
-offset_top = 290.0
-offset_right = 1148.0
-offset_bottom = 645.0
+offset_left = 1281.0
+offset_top = 348.0
+offset_right = 1897.0
+offset_bottom = 1055.0
 script = ExtResource("6_c01mt")
 
 [node name="PhaseLabel" type="Label" parent="ActionPanel" unique_id=1914808495]
@@ -211,10 +213,10 @@ layout_mode = 2
 
 [node name="CombatLog" type="ScrollContainer" parent="." unique_id=1516457289]
 layout_mode = 0
-offset_left = 3.0
-offset_top = 548.0
-offset_right = 296.0
-offset_bottom = 647.0
+offset_left = 13.0
+offset_top = 279.0
+offset_right = 306.0
+offset_bottom = 378.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CombatLog" unique_id=213595723]
 layout_mode = 2

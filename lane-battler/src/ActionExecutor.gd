@@ -109,6 +109,7 @@ func _do_shift(player_id: int, unit: UnitInstance, target_lane: int) -> void:
 			return
 		GameState.board[player_id][lane] = null
 		GameState.board[player_id][target_lane] = unit
+		unit.is_fresh = true
 		print("    %s shifts %s: lane %d → lane %d" % [
 			"Player" if player_id == 0 else "Bot",
 			unit.display_str(), lane, target_lane
