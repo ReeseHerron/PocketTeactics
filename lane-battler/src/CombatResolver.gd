@@ -8,6 +8,11 @@
 #   Fresh unit, wins combat             → does NOT claim this round
 #
 # "Fresh" = unit.is_fresh is true (set when deployed/mustered this round).
+
+# Gold:  any sole surviving unit earns its owner +1 gold
+# VP:    established unit always; fresh unit only if lane was uncontested
+#
+# "Fresh" = unit.is_fresh is true (deployed, mustered, or shifted this round).
 class_name CombatResolver
 extends RefCounted
 
@@ -36,7 +41,8 @@ func resolve_lane(lane: int) -> Dictionary:
 		"damage_to_b":              0,
 		"destroyed_a":              false,
 		"destroyed_b":              false,
-		"claimant":                 -1,
+		"gold_winner":              -1,  # sole survivor earns +1 gold regardless of freshness
+		"vp_eligible":              -1,  # earns VP: established always, fresh only if uncontested
 	}
 
 	# Empty lane — nothing to do
@@ -60,20 +66,25 @@ func resolve_lane(lane: int) -> Dictionary:
 		GameState.board[1][lane] = null
 		entry["destroyed_b"] = true
 
-	# ── Determine claimant ────────────────────────────────────────────────────
+	# ── Determine gold_winner and vp_eligible ────────────────────────────────
+	#   Established + no combat   → gold + VP
+	#   Established + wins combat → gold + VP
+	#   Fresh + no combat         → gold + VP   (shifted/deployed into empty lane)
+	#   Fresh + wins combat       → gold only   (moved into resistance, not held)
 	if entry["combat"]:
-		# Contested lane: fresh winner cannot claim
 		if a_alive and not b_alive:
-			entry["claimant"] = -1 if unit_a.is_fresh else 0
+			entry["gold_winner"] = 0
+			entry["vp_eligible"] = -1 if unit_a.is_fresh else 0
 		elif b_alive and not a_alive:
-			entry["claimant"] = -1 if unit_b.is_fresh else 1
-		# Both dead or both alive → no claim (-1 already set)
+			entry["gold_winner"] = 1
+			entry["vp_eligible"] = -1 if unit_b.is_fresh else 1
 	else:
-		# Uncontested lane: any surviving unit claims regardless of freshness
 		if a_alive:
-			entry["claimant"] = 0
+			entry["gold_winner"] = 0
+			entry["vp_eligible"] = 0
 		elif b_alive:
-			entry["claimant"] = 1
+			entry["gold_winner"] = 1
+			entry["vp_eligible"] = 1
 
 	return entry
 

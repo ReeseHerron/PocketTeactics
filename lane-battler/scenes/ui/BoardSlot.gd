@@ -20,8 +20,9 @@ extends PanelContainer
 func setup(unit: UnitInstance, lane: int, is_bot: bool) -> void:
 	if unit == null:
 		name_label.text  = "Empty"
-		type_label.text  = ""
-		might_label.text = ""
+		type_label.text  = "_"
+		might_label.text = "_"
+		fresh_label.text = "—"
 		fresh_label.hide()
 		return
 

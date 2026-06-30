@@ -221,14 +221,6 @@ offset_bottom = 378.0
 [node name="VBoxContainer" type="VBoxContainer" parent="CombatLog" unique_id=213595723]
 layout_mode = 2
 
-[node name="PlansRevealLabel" type="Label" parent="." unique_id=1719243557]
-visible = false
-layout_mode = 0
-offset_left = 316.0
-offset_top = 2.0
-offset_right = 356.0
-offset_bottom = 25.0
-
 [node name="MatchOverLabel" type="Label" parent="." unique_id=440129407]
 visible = false
 layout_mode = 0
@@ -236,3 +228,20 @@ offset_left = 484.0
 offset_top = 302.0
 offset_right = 524.0
 offset_bottom = 325.0
+
+[node name="StepLabel" type="Label" parent="." unique_id=2035947046]
+visible = false
+layout_mode = 0
+offset_left = 748.0
+offset_top = 14.0
+offset_right = 975.0
+offset_bottom = 46.0
+
+[node name="ContinueBtn" type="Button" parent="." unique_id=493335789]
+visible = false
+layout_mode = 0
+offset_left = 811.0
+offset_top = 571.0
+offset_right = 919.0
+offset_bottom = 605.0
+text = "Continue"

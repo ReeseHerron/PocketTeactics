@@ -45,7 +45,7 @@ var _pending_player_maneuver: Dictionary = {}
 var _pending_bot_maneuver: Dictionary = {}
 var _pending_bot_deploy: Dictionary = {}
 var _pending_combat_log: Array = []
-
+var _resolution_lane: int = 0  # which lane we're on during lane-by-lane combat/rewards
 
 # ── Lifecycle ─────────────────────────────────────────────────────────────────
 func _ready() -> void:
@@ -229,8 +229,9 @@ func _do_plan_reveal() -> void:
 	print("  Bot Deploy:      %s" % _deploy_str(bot_plan.get("deploy", {})))
 
 	EventBus.plans_revealed.emit(player_plan, bot_plan)
+	EventBus.resolution_update.emit("Plans revealed — watch the board")
 	_set_phase(Phase.RESOLVE_RETREATS)
-	call_deferred("advance")
+	EventBus.waiting_for_player.emit(Phase.PLAN_REVEAL)
 
 
 func _do_resolve_retreats() -> void:
@@ -238,7 +239,11 @@ func _do_resolve_retreats() -> void:
 	_action_executor.execute_retreats(GameState.pending_plans)
 	EventBus.board_changed.emit()
 	_set_phase(Phase.RESOLVE_SHIFTS)
-	call_deferred("advance")
+	if _any_maneuver_of_type(ActionExecutor.ManeuverType.RETREAT):
+		EventBus.resolution_update.emit("Retreats resolved")
+		EventBus.waiting_for_player.emit(Phase.RESOLVE_RETREATS)
+	else:
+		call_deferred("advance")
 
 
 func _do_resolve_shifts() -> void:
@@ -246,7 +251,11 @@ func _do_resolve_shifts() -> void:
 	_action_executor.execute_shifts(GameState.pending_plans)
 	EventBus.board_changed.emit()
 	_set_phase(Phase.RESOLVE_MUSTERS)
-	call_deferred("advance")
+	if _any_maneuver_of_type(ActionExecutor.ManeuverType.SHIFT):
+		EventBus.resolution_update.emit("Shifts resolved")
+		EventBus.waiting_for_player.emit(Phase.RESOLVE_SHIFTS)
+	else:
+		call_deferred("advance")
 
 
 func _do_resolve_musters() -> void:
@@ -254,93 +263,144 @@ func _do_resolve_musters() -> void:
 	_action_executor.execute_musters(GameState.pending_plans)
 	EventBus.board_changed.emit()
 	_set_phase(Phase.RESOLVE_DEPLOYS)
-	call_deferred("advance")
+	if _any_maneuver_of_type(ActionExecutor.ManeuverType.MUSTER):
+		EventBus.resolution_update.emit("Musters resolved")
+		EventBus.waiting_for_player.emit(Phase.RESOLVE_MUSTERS)
+	else:
+		call_deferred("advance")
 
 
 func _do_resolve_deploys() -> void:
 	print("--- RESOLVE: Deploys ---")
 	_action_executor.execute_deploys(GameState.pending_plans)
 	EventBus.board_changed.emit()
+	_resolution_lane = 0
 	_set_phase(Phase.RESOLVE_COMBAT)
-	call_deferred("advance")
+	if _any_deploy():
+		EventBus.resolution_update.emit("Deploys resolved — ready for combat")
+		EventBus.waiting_for_player.emit(Phase.RESOLVE_DEPLOYS)
+	else:
+		call_deferred("advance")
 
 
 func _do_resolve_combat() -> void:
-	print("--- RESOLVE: Combat ---")
-	_pending_combat_log = []
-	var lane_names := ["Left Flank", "Center", "Right Flank"]
-
-	for lane in range(3):
-		var result := _combat_resolver.resolve_lane(lane)
-		_pending_combat_log.append(result)
-
-		if not result.combat and result.claimant == -1:
-			print("  %s: empty" % lane_names[lane])
-		elif not result.combat:
-			var holder: UnitInstance = result.attacker_a if result.claimant == 0 else result.attacker_b
-			print("  %s: %s uncontested" % [lane_names[lane], holder.display_str()])
+	var lane_names : Array[String] = ["Left Flank", "Center", "Right Flank"]
+ 
+	if _resolution_lane == 0:
+		print("--- RESOLVE: Combat ---")
+		_pending_combat_log = []
+ 
+	var result := _combat_resolver.resolve_lane(_resolution_lane)
+	_pending_combat_log.append(result)
+	_log_combat_result(result, lane_names[_resolution_lane])
+	EventBus.board_changed.emit()
+ 
+	# Build step label
+	var step_msg := "Combat — " + lane_names[_resolution_lane] + ": "
+	if not result.combat and result.gold_winner == -1:
+		step_msg += "empty"
+	elif not result.combat:
+		var who := "Player" if result.gold_winner == 0 else "Bot"
+		step_msg += who + " uncontested"
+	elif result.gold_winner != -1:
+		var who := "Player" if result.gold_winner == 0 else "Bot"
+		step_msg += who + " wins"
+		if result.vp_eligible == -1:
+			step_msg += " (fresh — gold only)"
+	else:
+		step_msg += "mutual destruction"
+ 
+	_resolution_lane += 1
+ 
+	var lane_is_empty : bool = not result.combat and result.gold_winner == -1
+ 
+	if _resolution_lane < 3:
+		if lane_is_empty:
+			call_deferred("advance")
 		else:
-			var adv_str := ""
-			if result.advantage == "player":   adv_str = " [Player advantage]"
-			elif result.advantage == "bot":    adv_str = " [Bot advantage]"
-			var a_str := _snapshot_str(result, "a")
-			var b_str := _snapshot_str(result, "b")
-			print("  %s: %s vs %s%s" % [lane_names[lane], a_str, b_str, adv_str])
-			print("    Damage dealt → Player unit: %d  Bot unit: %d" % [
-				result.damage_to_a, result.damage_to_b
-			])
-			if result.destroyed_a: print("    Player unit destroyed")
-			if result.destroyed_b: print("    Bot unit destroyed")
-			if not result.destroyed_a and result.attacker_a:
-				print("    Player unit survives at %d might" % result.attacker_a.current_might)
-			if not result.destroyed_b and result.attacker_b:
-				print("    Bot unit survives at %d might" % result.attacker_b.current_might)
-			# Note fresh-unit non-claim
-			if result.claimant == -1 and result.combat:
-				var fresh_winner := ""
-				if result.attacker_a and result.attacker_a.is_alive() and result.attacker_a.is_fresh:
-					fresh_winner = "Player's fresh unit wins but cannot claim this round"
-				elif result.attacker_b and result.attacker_b.is_alive() and result.attacker_b.is_fresh:
-					fresh_winner = "Bot's fresh unit wins but cannot claim this round"
-				if fresh_winner != "":
-					print("    (%s)" % fresh_winner)
-
-	EventBus.combat_resolved.emit(_pending_combat_log)
-	_set_phase(Phase.RESOLVE_REWARDS)
-	call_deferred("advance")
-
-
+			EventBus.resolution_update.emit(step_msg)
+			EventBus.waiting_for_player.emit(Phase.RESOLVE_COMBAT)
+	else:
+		EventBus.combat_resolved.emit(_pending_combat_log)
+		if lane_is_empty:
+			# Last lane was empty — skip the label, move straight to rewards
+			_resolution_lane = 0
+			_set_phase(Phase.RESOLVE_REWARDS)
+			call_deferred("advance")
+		else:
+			EventBus.resolution_update.emit(step_msg + "  ·  All lanes resolved")
+			_resolution_lane = 0
+			_set_phase(Phase.RESOLVE_REWARDS)
+			EventBus.waiting_for_player.emit(Phase.RESOLVE_COMBAT)
+ 
+ 
 func _do_resolve_rewards() -> void:
-	print("--- RESOLVE: Rewards ---")
-	var lane_names := ["Left Flank", "Center", "Right Flank"]
-	var claimants := [-1, -1, -1]
-
-	for result in _pending_combat_log:
-		claimants[result.lane] = result.claimant
-
-	for result in _pending_combat_log:
-		var cid: int = result.claimant
-		if cid == -1:
-			continue
-		var who := "Player" if cid == 0 else "Bot"
-		GameState.add_gold(cid, 1)
-		if result.lane == 1:  # Center → +1 VP
-			GameState.add_vp(cid, 1)
-			print("  %s claims Center (+1 gold, +1 VP)" % who)
+	var lane_names : Array[String] = ["Left Flank", "Center", "Right Flank"]
+ 
+	if _resolution_lane == 0:
+		print("--- RESOLVE: Rewards ---")
+ 
+	var result: Dictionary = _pending_combat_log[_resolution_lane]
+	var lane: int = _resolution_lane
+	var step_msg := lane_names[lane] + ": "
+ 
+	# Gold — any sole survivor
+	var gid: int = result.gold_winner
+	if gid != -1:
+		var who := "Player" if gid == 0 else "Bot"
+		GameState.add_gold(gid, 1)
+		if result.vp_eligible == gid:
+			step_msg += who + " +1 gold"
+			print("  %s wins %s (+1 gold)" % [who, lane_names[lane]])
 		else:
-			print("  %s claims %s (+1 gold)" % [who, lane_names[result.lane]])
-
-	# Both flanks bonus → +1 VP
-	for player_id in range(2):
-		if claimants[0] == player_id and claimants[2] == player_id:
-			GameState.add_vp(player_id, 1)
-			var who := "Player" if player_id == 0 else "Bot"
-			print("  %s controls both flanks (+1 VP)" % who)
-
-	EventBus.lane_rewards_applied.emit(_pending_combat_log)
-	GameState.clear_plans()
-	_set_phase(Phase.VICTORY_CHECK)
-	call_deferred("advance")
+			step_msg += who + " +1 gold (fresh — no VP)"
+			print("  %s wins %s (+1 gold, fresh — no VP)" % [who, lane_names[lane]])
+	else:
+		step_msg += "no reward"
+		print("  %s: no reward" % lane_names[lane])
+ 
+	# Center VP
+	if lane == 1 and result.vp_eligible != -1:
+		var who := "Player" if result.vp_eligible == 0 else "Bot"
+		GameState.add_vp(result.vp_eligible, 1)
+		step_msg += " +1 VP"
+		print("  %s holds Center (+1 VP)" % who)
+ 
+	_resolution_lane += 1
+ 
+	var lane_has_reward : bool = result.gold_winner != -1
+ 
+	if _resolution_lane < 3:
+		if lane_has_reward:
+			EventBus.resolution_update.emit(step_msg)
+			EventBus.lane_rewards_applied.emit(_pending_combat_log)
+			EventBus.waiting_for_player.emit(Phase.RESOLVE_REWARDS)
+		else:
+			call_deferred("advance")
+	else:
+		# All lanes done — apply both-flanks bonus then wrap up
+		var left_vp:  int = -1
+		var right_vp: int = -1
+		for r in _pending_combat_log:
+			if r.lane == 0: left_vp  = r.vp_eligible
+			if r.lane == 2: right_vp = r.vp_eligible
+ 
+		for player_id in range(2):
+			if left_vp == player_id and right_vp == player_id:
+				GameState.add_vp(player_id, 1)
+				var who := "Player" if player_id == 0 else "Bot"
+				step_msg += "  ·  " + who + " controls both flanks (+1 VP)"
+				print("  %s controls both flanks (+1 VP)" % who)
+ 
+		EventBus.lane_rewards_applied.emit(_pending_combat_log)
+		_resolution_lane = 0
+		GameState.clear_plans()
+		_set_phase(Phase.VICTORY_CHECK)
+		if lane_has_reward:
+			EventBus.resolution_update.emit(step_msg)
+			EventBus.waiting_for_player.emit(Phase.RESOLVE_REWARDS)
+		else:
+			call_deferred("advance")
 
 
 func _do_victory_check() -> void:
@@ -355,7 +415,9 @@ func _do_victory_check() -> void:
 
 
 # ── Player submission functions (called by UI) ────────────────────────────────
-
+func submit_continue() -> void:
+	call_deferred("advance")
+	
 func submit_player_bids(bids: Dictionary) -> void:
 	assert(current_phase == Phase.DRAFT_BIDDING,
 		"submit_player_bids called outside DRAFT_BIDDING (current: %d)" % current_phase)
@@ -394,6 +456,46 @@ func submit_player_deploy(deploy: Dictionary) -> void:
 
 
 # ── Debug helpers ─────────────────────────────────────────────────────────────
+func _log_combat_result(result: Dictionary, lane_name: String) -> void:
+	if not result.combat and result.gold_winner == -1:
+		print("  %s: empty" % lane_name)
+	elif not result.combat:
+		var holder: UnitInstance = result.attacker_a if result.gold_winner == 0 else result.attacker_b
+		print("  %s: %s uncontested" % [lane_name, holder.display_str()])
+	else:
+		var adv_str := ""
+		if result.advantage == "player":   adv_str = " [Player advantage]"
+		elif result.advantage == "bot":    adv_str = " [Bot advantage]"
+		print("  %s: %s vs %s%s" % [
+			lane_name,
+			_snapshot_str(result, "a"),
+			_snapshot_str(result, "b"),
+			adv_str,
+		])
+		print("    Damage dealt → Player unit: %d  Bot unit: %d" % [
+			result.damage_to_a, result.damage_to_b
+		])
+		if result.destroyed_a: print("    Player unit destroyed")
+		if result.destroyed_b: print("    Bot unit destroyed")
+		if not result.destroyed_a and result.attacker_a:
+			print("    Player unit survives at %d might" % result.attacker_a.current_might)
+		if not result.destroyed_b and result.attacker_b:
+			print("    Bot unit survives at %d might" % result.attacker_b.current_might)
+		if result.gold_winner != -1 and result.vp_eligible == -1:
+			var who := "Player" if result.gold_winner == 0 else "Bot"
+			print("    (%s's unit is fresh — earns gold but not VP this round)" % who)
+			
+func _any_maneuver_of_type(type: ActionExecutor.ManeuverType) -> bool:
+	for plan in GameState.pending_plans:
+		if plan.get("maneuver", {}).get("type") == type:
+			return true
+	return false
+ 
+func _any_deploy() -> bool:
+	for plan in GameState.pending_plans:
+		if plan.get("deploy", {}).get("type") == ActionExecutor.DeployType.DEPLOY:
+			return true
+	return false			
 
 func _print_board_state() -> void:
 	var lane_names := ["Left", "Center", "Right"]

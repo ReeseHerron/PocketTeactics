@@ -12,13 +12,13 @@ func _ready() -> void:
 # ── Board ─────────────────────────────────────────────────────────────────────
 # board[player_id][lane] — lane: 0=Left, 1=Center, 2=Right
 # Values are UnitInstance or null.
-var board: Array = [
+var board: Array[Array] = [
 	[null, null, null],  # player 0
 	[null, null, null],  # player 1 (bot)
 ]
 
 # bench[player_id] — Array of UnitInstance
-var bench: Array = [[], []]
+var bench: Array[Array] = [[], []]
 
 
 # ── Economy ───────────────────────────────────────────────────────────────────

@@ -11,7 +11,8 @@ extends Node
 @onready var action_panel:       Control = $ActionPanel
 @onready var combat_log:         Control = $CombatLog
 @onready var match_over_label:   Label   = $MatchOverLabel
-@onready var plans_reveal_label: Label   = $PlansRevealLabel
+@onready var step_label:         Label   = $StepLabel
+@onready var continue_btn:       Button  = $ContinueBtn
 
 
 func _ready() -> void:
@@ -21,6 +22,7 @@ func _ready() -> void:
 	EventBus.plans_revealed.connect(_on_plans_revealed)
 	EventBus.combat_resolved.connect(_on_combat_resolved)
 	EventBus.match_over.connect(_on_match_over)
+	EventBus.resolution_update.connect(_on_resolution_update)
 
 	# Economy / board changes just refresh the persistent UI
 	EventBus.vp_changed.connect(func(_id, _v): _refresh_ui())
@@ -31,9 +33,17 @@ func _ready() -> void:
 
 	# ── Initial UI state ──────────────────────────────────────────────────────
 	match_over_label.hide()
-	plans_reveal_label.hide()
+	step_label.hide()
+	continue_btn.hide()
 	draft_panel.hide()
 	action_panel.hide()
+
+	continue_btn.text = "Continue"
+	continue_btn.pressed.connect(func():
+		step_label.hide()
+		continue_btn.hide()
+		RoundManager.submit_continue()
+	)
 
 	# ── Start the match ───────────────────────────────────────────────────────
 	RoundManager.start_match(_load_roster_a(), _load_roster_b())
@@ -53,29 +63,39 @@ func _on_waiting_for_player(phase: int) -> void:
 	_refresh_ui()
 	draft_panel.hide()
 	action_panel.hide()
-
+	continue_btn.hide()
+ 
 	match phase:
 		RoundManager.Phase.DRAFT_BIDDING:
+			step_label.hide()
 			draft_panel.populate(GameState.current_draft_units)
 			draft_panel.show()
-
+ 
 		RoundManager.Phase.MANEUVER_STEP:
+			step_label.hide()
 			action_panel.show_maneuver_step()
 			action_panel.show()
-
+ 
 		RoundManager.Phase.DEPLOY_STEP:
+			step_label.hide()
 			action_panel.show_deploy_step()
 			action_panel.show()
+ 
+		RoundManager.Phase.PLAN_REVEAL, \
+		RoundManager.Phase.RESOLVE_RETREATS, \
+		RoundManager.Phase.RESOLVE_SHIFTS, \
+		RoundManager.Phase.RESOLVE_MUSTERS, \
+		RoundManager.Phase.RESOLVE_DEPLOYS, \
+		RoundManager.Phase.RESOLVE_COMBAT, \
+		RoundManager.Phase.RESOLVE_REWARDS:
+			continue_btn.show()
 
+func _on_resolution_update(message: String) -> void:
+	step_label.text = message
+	step_label.show()
 
 func _on_plans_revealed(player_plan: Dictionary, bot_plan: Dictionary) -> void:
-	# Show a brief reveal label. Resolution starts immediately behind it —
-	# for a polished version, gate RoundManager on a signal from the UI here.
 	_refresh_ui()
-	plans_reveal_label.show()
-	await get_tree().create_timer(1.2).timeout
-	plans_reveal_label.hide()
-
 
 func _on_combat_resolved(_log: Array) -> void:
 	_refresh_ui()

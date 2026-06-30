@@ -59,6 +59,16 @@ func _on_waiting_for_player(phase: int) -> void:
 			)
 			var deploy := _player_bot.choose_deploy(0, projected)
 			RoundManager.submit_player_deploy(deploy)
+		
+		# Auto-continue through all resolution steps — no human needed in headless mode	
+		RoundManager.Phase.PLAN_REVEAL, \
+		RoundManager.Phase.RESOLVE_RETREATS, \
+		RoundManager.Phase.RESOLVE_SHIFTS, \
+		RoundManager.Phase.RESOLVE_MUSTERS, \
+		RoundManager.Phase.RESOLVE_DEPLOYS, \
+		RoundManager.Phase.RESOLVE_COMBAT, \
+		RoundManager.Phase.RESOLVE_REWARDS:
+			RoundManager.submit_continue()
 
 
 func _on_match_over(winner: int) -> void:

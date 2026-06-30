@@ -14,7 +14,6 @@ var owner_id: int        # 0 = player, 1 = bot
 # Cleared at round start by GameState.clear_fresh_flags().
 var is_fresh: bool = false
 
-
 func _init(unit_data: UnitData, owner: int) -> void:
 	data = unit_data
 	current_might = unit_data.get_max_might()

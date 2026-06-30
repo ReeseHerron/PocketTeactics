@@ -42,3 +42,4 @@ signal bench_changed(player_id: int)
 # ── Combat / Resolution ──────────────────────────────────────────────────────
 signal combat_resolved(log: Array)          # Array of lane result dicts
 signal lane_rewards_applied(results: Array) # same lane result dicts, after rewards
+signal resolution_update(message: String)   # human-readable step label for the Continue button
