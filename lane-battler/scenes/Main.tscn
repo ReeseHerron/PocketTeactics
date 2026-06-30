@@ -46,10 +46,10 @@ layout_mode = 2
 [node name="BoardPanel" type="GridContainer" parent="." unique_id=1802525335]
 custom_minimum_size = Vector2(400, 200)
 layout_mode = 0
-offset_left = 360.0
-offset_top = 178.0
-offset_right = 1147.0
-offset_bottom = 610.0
+offset_left = 235.0
+offset_top = 88.0
+offset_right = 1022.0
+offset_bottom = 520.0
 theme_override_constants/h_separation = 100
 theme_override_constants/v_separation = 20
 columns = 3
@@ -100,10 +100,10 @@ layout_mode = 2
 
 [node name="BenchPanel" type="HBoxContainer" parent="." unique_id=1970121094]
 layout_mode = 0
-offset_left = 129.0
-offset_top = 553.0
-offset_right = 699.0
-offset_bottom = 628.0
+offset_left = 140.0
+offset_top = 496.0
+offset_right = 710.0
+offset_bottom = 571.0
 script = ExtResource("5_nxtc6")
 
 [node name="Label" type="Label" parent="BenchPanel" unique_id=543916949]
@@ -111,10 +111,10 @@ layout_mode = 2
 
 [node name="DraftPanel" type="VBoxContainer" parent="." unique_id=810661047]
 layout_mode = 0
-offset_left = 751.0
-offset_top = 89.0
-offset_right = 1541.0
-offset_bottom = 328.0
+offset_left = 689.0
+offset_top = 47.0
+offset_right = 1479.0
+offset_bottom = 286.0
 script = ExtResource("4_nxtc6")
 
 [node name="CardsRow" type="HBoxContainer" parent="DraftPanel" unique_id=1260200773]
@@ -192,8 +192,8 @@ text = "Confirm"
 
 [node name="ActionPanel" type="VBoxContainer" parent="." unique_id=401326702]
 layout_mode = 0
-offset_left = 826.0
-offset_top = 377.0
+offset_left = 791.0
+offset_top = 290.0
 offset_right = 1148.0
 offset_bottom = 645.0
 script = ExtResource("6_c01mt")
