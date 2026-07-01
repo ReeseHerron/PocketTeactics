@@ -18,7 +18,7 @@ extends PanelContainer
 
 
 func setup(unit: UnitInstance, lane: int, is_bot: bool) -> void:
-	_apply_color(unit)
+	_apply_style(unit, lane, is_bot)
 	
 	if unit == null:
 		name_label.text  = "Empty"
@@ -39,11 +39,31 @@ func setup(unit: UnitInstance, lane: int, is_bot: bool) -> void:
 		fresh_label.text = "★ Holding"
 	fresh_label.show()
 
-func _apply_color(unit: UnitInstance) -> void:
+func _apply_style(unit: UnitInstance, lane: int, is_bot: bool) -> void:
 	var style := StyleBoxFlat.new()
 	style.bg_color = unit.data.get_color() if unit != null else Color(0.18, 0.18, 0.18)
 	style.corner_radius_top_left    = 4
 	style.corner_radius_top_right   = 4
 	style.corner_radius_bottom_left  = 4
 	style.corner_radius_bottom_right = 4
+ 
+	# Always show matchup glow when an opponent occupies the same lane
+	if unit != null:
+		var player_id:   int          = 1 if is_bot else 0
+		var opponent_id: int          = 1 - player_id
+		var opponent:    UnitInstance = GameState.board[opponent_id][lane]
+		if opponent != null:
+			if CombatResolver.style_beats(unit.data.unit_type, opponent.data.unit_type):
+				style.border_width_top    = 4
+				style.border_width_bottom = 4
+				style.border_width_left   = 4
+				style.border_width_right  = 4
+				style.border_color        = Color(1.0, 1.0, 1.0, 0.9)
+			elif CombatResolver.style_beats(opponent.data.unit_type, unit.data.unit_type):
+				style.border_width_top    = 4
+				style.border_width_bottom = 4
+				style.border_width_left   = 4
+				style.border_width_right  = 4
+				style.border_color        = Color(0.05, 0.05, 0.05, 1.0)
+ 
 	add_theme_stylebox_override("panel", style)

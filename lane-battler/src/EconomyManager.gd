@@ -1,7 +1,7 @@
 class_name EconomyManager
 extends RefCounted
 
-var BASE_INCOME: int = 3
+var BASE_INCOME: int = 2
 
 func apply_lane_rewards(lane_results: Array) -> void:
 	for result in lane_results:

@@ -4,10 +4,10 @@
 # RoundManager and systems read/write this. UI reads this.
 extends Node
 
+const GOLD_CAP: int = 10
 
 func _ready() -> void:
 	print("GameState ready")
-
 
 # ── Board ─────────────────────────────────────────────────────────────────────
 # board[player_id][lane] — lane: 0=Left, 1=Center, 2=Right
@@ -24,7 +24,6 @@ var bench: Array[Array] = [[], []]
 # ── Economy ───────────────────────────────────────────────────────────────────
 var gold: Array = [3, 3]   # starting gold per GDD v4
 var vp: Array = [0, 0]
-
 
 # ── Round tracking ────────────────────────────────────────────────────────────
 var round_number: int = 1
@@ -53,7 +52,15 @@ func spend_gold(player_id: int, amount: int) -> void:
 
 
 func add_gold(player_id: int, amount: int) -> void:
-	gold[player_id] += amount
+	var before: int = gold[player_id]
+	gold[player_id] = min(gold[player_id] + amount, GOLD_CAP)
+	var gained: int = gold[player_id] - before
+	if gained < amount:
+		var lost: int = amount - gained
+		var who: String = "Player" if player_id == 0 else "Bot"
+		print("  ⚠ Gold cap: %s would gain %d but hit the %d cap — %d gold lost" % [
+			who, amount, GOLD_CAP, lost
+		])
 	EventBus.gold_changed.emit(player_id, gold[player_id])
 
 

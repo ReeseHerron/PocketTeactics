@@ -125,12 +125,13 @@ To Score VP"
 horizontal_alignment = 1
 
 [node name="BenchPanel" type="HBoxContainer" parent="." unique_id=1970121094]
-custom_minimum_size = Vector2(400, 20)
+custom_minimum_size = Vector2(400, 120)
 layout_mode = 0
 offset_left = 525.0
 offset_top = 747.0
 offset_right = 1205.0
 offset_bottom = 1018.0
+theme_override_constants/separation = 4
 script = ExtResource("5_nxtc6")
 
 [node name="DraftPanel" type="VBoxContainer" parent="." unique_id=810661047]

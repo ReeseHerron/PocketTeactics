@@ -34,8 +34,8 @@ func refresh() -> void:
 	phase_label.text  = _phase_name(RoundManager.current_phase)
 	player_vp.text    = "Player VP:   %d / 5" % GameState.vp[0]
 	bot_vp.text       = "Bot VP:      %d / 5" % GameState.vp[1]
-	player_gold.text  = "Player Gold: %d"      % GameState.gold[0]
-	bot_gold.text     = "Bot Gold:    %d"      % GameState.gold[1]
+	player_gold.text  = "Player Gold: %d / %d" % [GameState.gold[0], GameState.GOLD_CAP]
+	bot_gold.text     = "Bot Gold:    %d / %d" % [GameState.gold[1], GameState.GOLD_CAP]
 
 
 func _phase_name(phase: int) -> String:

@@ -9,6 +9,13 @@
 class_name CombatResolver
 extends RefCounted
 
+static func style_beats(attacker: UnitData.UnitType, defender: UnitData.UnitType) -> bool:
+	return (
+		(attacker == UnitData.UnitType.STRIKER   and defender == UnitData.UnitType.TACTICIAN) or
+		(attacker == UnitData.UnitType.TACTICIAN and defender == UnitData.UnitType.BULWARK)   or
+		(attacker == UnitData.UnitType.BULWARK   and defender == UnitData.UnitType.STRIKER)
+	)
+
 
 func has_advantage(attacker: UnitData.UnitType, defender: UnitData.UnitType) -> bool:
 	return (
